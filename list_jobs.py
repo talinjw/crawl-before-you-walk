@@ -15,16 +15,16 @@ url = 'https://www.indeed.com/' + searchQuery
 #Open Chrome and navigate to Indeed.com
 browser = webdriver.Chrome()
 browser.get(url)
-html = browser.page_source
 #res = requests.get(url)
+html = browser.page_source
+
 
 soup = bs4.BeautifulSoup(html, 'html.parser')
 print(soup.prettify())
 
 def get_job_title(soup):
     jobs = []
-    for div in soup.find_all(name='div', attrs={"class":"row"}):
-        for a in div.find_all(name="a", attrs={"data-tn-element":"jobTitle"}):
+    for a in soup.find_all(name="a", attrs={"data-tn-element":"jobTitle"}):
             jobs.append(a["title"])
     return(jobs)
 
