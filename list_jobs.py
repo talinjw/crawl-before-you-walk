@@ -35,17 +35,10 @@ pprint(all_jobs)
 
 def get_companies(soup): 
     companies = []
-    for div in soup.find_all(name='div', attrs={'class':'row'}):
-        company = div.find_all(name='span', attrs={'itemprop':'name'})
+    company = soup.find_all(name='span', attrs={'class':'company'})
     
-    if len(company) > 0:
-        for b in company:
-            companies.append(b.text.strip())
-        
-    else:
-        try_again = div.find_all(name='span', attrs={'class':'result-link-source'})
-        for span in try_again:
-            companies.append(span.text.strip())
+    for b in company:
+        companies.append(b.text.strip())
 
     return(companies)
 
