@@ -1,15 +1,14 @@
 import requests
 import bs4
-from selenium import webdriver
 import pandas as pd
-from pprint import pprint
 from datetime import datetime
+from pprint import pprint
 
-def get_job_titles(soup):
+def get_jobs(soup):
     jobs = []
-    inlines = soup.find_all(name='a', attrs={'data-tn-element':'jobTitle'})
-    for inline in inlines:
-            jobs.append(inline['title'])
+    inline_elements = soup.find_all(name='a', attrs={'data-tn-element':'jobTitle'})
+    for element in inline_elements:
+            jobs.append(element['title'])
     return(jobs)
 
 def get_companies(soup): 
@@ -33,108 +32,126 @@ def get_summaries(soup):
         summaries.append(span.text)
     return(summaries)
 
-def get_posting_ages(soup):
-    posting_ages = []
+def get_ages(soup):
+    ages = []
     divs = soup.find_all(name='div', attrs={'class':'result-link-bar'})
     for div in divs:
         span = div.find(name='span', attrs={'class':'date'})
         if span == None:
-            posting_ages.append("No age found")
+            ages.append("No age found")
         else:
-            posting_ages.append(span.text)
-    return(posting_ages)
+            ages.append(span.text)
+    return(ages)
 
 def get_links(soup):
     links = []
-    inlines = soup.find_all(name='a', attrs={'data-tn-element':'jobTitle'})
-    for inline in inlines:
-            links.append('www.indeed.com' + str(inline['href']))
+    inline_elements = soup.find_all(name='a', attrs={'data-tn-element':'jobTitle'})
+    for element in inline_elements:
+            links.append('www.indeed.com' + str(element['href']))
     return(links)
 
-def np_exists(soup):
-    if soup.find(name='span', attrs={'class':'np'}) != None:
-        page_exists = True
-    else:
-        page_exists = False
-    return(page_exists)
+def does_a_nextpage_exist(soup):
+    spans = soup.find_all(name='span', attrs={'class':'np'})
+    for span in spans:
+        if 'Next' in span.text:
+            nextpage_exists = True
+        else:
+            nextpage_exists = False
+    return(nextpage_exists)
 
-def get_np_url(soup):
+def get_nextpage_url(soup):
     div = soup.find(name='div', attrs={'class':'pagination'})
-    inlines = div.find_all(name='a')
-    np_url = 'https://www.indeed.com/' + str(list(inlines)[-1]['href'])
-    return(np_url)
+    inline_elements = div.find_all(name='a')
+    nextpage_url = 'https://www.indeed.com/' + str(list(inline_elements)[-1]['href'])
+    return(nextpage_url)
 
 search_keyword = 'firefighter'
 search_location = 'Bay Area, CA'
 
-search_what = 'jobs?q=' + search_keyword
-search_where = '&l=' + search_location
+field_what = 'jobs?q=' + search_keyword
+field_where = '&l=' + search_location
 
-search_query = search_what + search_where
+search_query = field_what + field_where
 print(search_query)
 
 url = 'https://www.indeed.com/' + search_query
+print(url)
 
-# navigate to indeed via selenium passing url
-browser = webdriver.Chrome()
-browser.get(url)
-html = browser.page_source
-#html = requests.get(url)
+response = requests.get(url)
+print(response.status_code)
+
+html = response.text
+
 soup = bs4.BeautifulSoup(html, 'html.parser')
 
 all_jobs = []
 all_companies = []
 all_locations = []
 all_summaries = []
-all_posting_ages = []
+all_ages = []
 all_links = []
+page_counter = 1
 
-nextpage_exists = np_exists(soup)
-while nextpage_exists == True:
-    all_jobs = get_job_titles(soup)
-    all_companies = get_job_titles(soup)
-    all_locations = get_locations(soup)
-    all_summaries = get_summaries(soup)
-    all_posting_ages = get_posting_ages(soup)
-    all_links = get_links(soup)
-    nextpage_url = get_np_url(soup)
-    browser.get(nextpage_url)
-    if browser.find_element_by_css_selector('#popover-x-button') != None:
-        print(browser.find_element_by_css_selector('#popover-x-button'))
-        browser.find_element_by_css_selector('#popover-x-button').click()
-    html = browser.page_source
-    soup = bs4.BeautifulSoup(html, 'html.parser')
-    nextpage_exists = np_exists(soup)
-else:
-    all_jobs = all_jobs.append(get_job_titles(soup))
-    all_companies = all_companies.append(get_job_titles(soup))
-    all_locations = all_locations.append(get_locations(soup))
-    all_summaries = all_summaries.append(get_summaries(soup))
-    all_posting_ages = all_posting_ages.append(get_posting_ages(soup))
-    all_links = all_links.append(get_links(soup))
+while True:
+    currentpage_jobs = get_jobs(soup)
+    all_jobs.extend(currentpage_jobs)
+    #pprint(all_jobs)
+
+    currentpage_companies = get_companies(soup)
+    all_companies.extend(currentpage_companies)
+    #pprint(all_companies)
+
+    currentpage_locations = get_locations(soup)
+    all_locations.extend(currentpage_locations)
+    #pprint(all_locations)
+    
+    currentpage_summaries = get_summaries(soup)
+    all_summaries.extend(currentpage_summaries)
+    #pprint(all_summaries)
+    
+    currentpage_ages = get_ages(soup)
+    all_ages.extend(currentpage_ages)
+    #pprint(all_ages)
+    
+    currentpage_links = get_links(soup)
+    all_links.extend(currentpage_links)
+    #pprint(all_links)
+
+    # Check to see if this is the last page; if not, then navigate to the next page
+    nextpage_exists = does_a_nextpage_exist(soup)
+    print(nextpage_exists)
+    if nextpage_exists == True:
+        page_counter += 1
+        print(page_counter)
+        
+        nextpage_url = get_nextpage_url(soup)
+        print(nextpage_url)
+        
+        response = requests.get(nextpage_url)
+        print(response.status_code)
+        
+        html = response.text
+        soup = bs4.BeautifulSoup(html, 'html.parser')
+    else:
+        break
 
 print('Print current # of jobs: ' + str(len(all_jobs)))
 print('Print current # of companies: ' + str(len(all_companies)))
 print('Print current # of locations: ' + str(len(all_locations)))
 print('Print current # of summaries: ' + str(len(all_summaries)))
-print('Print current # of ages: ' + str(len(all_posting_ages)))
+print('Print current # of ages: ' + str(len(all_ages)))
 print('Print current # of links: ' + str(len(all_links)))    
-
-#pprint(all_jobs)
-#pprint(all_companies)
-#pprint(all_locations)
-#pprint(all_summaries)
-#pprint(all_posting_ages)
-#pprint(all_links)
     
 date_time = datetime.now().time()
-aggregate_all = pd.DataFrame(
+all_params = pd.DataFrame(
     {'Job_Title': all_jobs,
      'Company_Name': all_companies,
      'Location': all_locations,
      'Job_Summary': all_summaries,
-     'Posting_Age': all_posting_ages,
+     'Posting_Age': all_ages,
      'Link': all_links})
 
-aggregate_all.to_csv(str(date_time) + '_' + search_keyword.upper() + '.csv')
+current_datetime = datetime.now()
+print(current_datetime)
 
+all_params.to_csv(current_datetime.strftime('%Y-%m-%d') + '_' + current_datetime.strftime('%H:%M:%S') + '_' + search_keyword.upper() + '.csv')
