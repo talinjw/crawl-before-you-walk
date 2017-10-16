@@ -154,4 +154,4 @@ all_params = pd.DataFrame(
 current_datetime = datetime.now()
 print(current_datetime)
 
-all_params.to_csv(current_datetime.strftime('%Y-%m-%d') + '_' + current_datetime.strftime('%H:%M:%S') + '_' + search_keyword.upper() + '.csv')
+all_params.to_csv(current_datetime.strftime('%Y-%m-%d') + '_' + search_keyword.upper() + '.csv')
