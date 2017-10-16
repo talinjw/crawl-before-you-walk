@@ -1,4 +1,4 @@
-# Parse-Indeed
+# Crawl-Indeed
 Crawls indeed.com to enable interesting analysis on job listings by keyword and location. 
 
 1. Allows the user to search by keyword/location via form; collects all listing parameters; outputs all listing parameters to an HTML table (optionally, CSV).
@@ -10,5 +10,3 @@ Uses a number of third-party modules, including:
 - flask
 
 See requirements.txt for a list of all dependencies.
-
-
