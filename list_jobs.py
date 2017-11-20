@@ -1,7 +1,7 @@
 import requests
 import bs4
 import pandas as pd
-from datetime import datetime
+# from datetime import datetime
 
 
 def get_jobs(soup):
@@ -144,16 +144,15 @@ def get_all_parameters_for_all_listings(url):
 
     return(df_all_parameters)
 
+# search_keyword = 'firefighter'
+# search_location = 'Bay Area, CA'
+# search_query = 'jobs?q=' + search_keyword + '&l=' + search_location
+# search_url = 'https://www.indeed.com/' + search_query
+# # print(search_url)
 
-search_keyword = 'firefighter'
-search_location = 'Bay Area, CA'
-search_query = 'jobs?q=' + search_keyword + '&l=' + search_location
-search_url = 'https://www.indeed.com/' + search_query
-# print(search_url)
+# df_all_parameters = get_all_parameters_for_all_listings(search_url)
+# current_date = datetime.now()
 
-df_all_parameters = get_all_parameters_for_all_listings(search_url)
-current_date = datetime.now()
-
-df_all_parameters.to_csv(
-    current_date.strftime('%Y-%m-%d') + '_' + search_keyword.upper() + '.csv'
-    )
+# df_all_parameters.to_csv(
+#     current_date.strftime('%Y-%m-%d') + '_' + search_keyword.upper() + '.csv'
+#     )
