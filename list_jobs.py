@@ -75,7 +75,7 @@ def get_nextpage_url(soup):
 
 def get_all_parameters_for_all_listings(url):
     response = requests.get(url)
-    print(response.status_code)
+    # print(response.status_code)
 
     html = response.text
     soup = bs4.BeautifulSoup(html, 'html.parser')
@@ -110,16 +110,16 @@ def get_all_parameters_for_all_listings(url):
 
         # Check to see if this is the last page; if not, move to the next page
         nextpage_exists = does_a_nextpage_exist(soup)
-        print(nextpage_exists)
+        # print(nextpage_exists)
         if nextpage_exists is True:
             page_counter += 1
-            print(page_counter)
+            # print(page_counter)
 
             nextpage_url = get_nextpage_url(soup)
-            print(nextpage_url)
+            # print(nextpage_url)
 
             response = requests.get(nextpage_url)
-            print(response.status_code)
+            # print(response.status_code)
 
             html = response.text
             soup = bs4.BeautifulSoup(html, 'html.parser')
@@ -127,12 +127,12 @@ def get_all_parameters_for_all_listings(url):
         else:
             break
 
-    print('Print current # of jobs: ' + str(len(all_jobs)))
-    print('Print current # of companies: ' + str(len(all_companies)))
-    print('Print current # of locations: ' + str(len(all_locations)))
-    print('Print current # of summaries: ' + str(len(all_summaries)))
-    print('Print current # of ages: ' + str(len(all_ages)))
-    print('Print current # of links: ' + str(len(all_links)))
+    # print('Print current # of jobs: ' + str(len(all_jobs)))
+    # print('Print current # of companies: ' + str(len(all_companies)))
+    # print('Print current # of locations: ' + str(len(all_locations)))
+    # print('Print current # of summaries: ' + str(len(all_summaries)))
+    # print('Print current # of ages: ' + str(len(all_ages)))
+    # print('Print current # of links: ' + str(len(all_links)))
 
     df_all_parameters = pd.DataFrame(
         {'Job_Title': all_jobs,
@@ -149,7 +149,7 @@ search_keyword = 'firefighter'
 search_location = 'Bay Area, CA'
 search_query = 'jobs?q=' + search_keyword + '&l=' + search_location
 search_url = 'https://www.indeed.com/' + search_query
-print(search_url)
+# print(search_url)
 
 df_all_parameters = get_all_parameters_for_all_listings(search_url)
 current_date = datetime.now()
