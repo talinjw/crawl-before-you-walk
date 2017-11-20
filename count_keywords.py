@@ -85,7 +85,6 @@ all_words = split_by_word(get_text_all(all_links))
 
 
 # Create dictionary; word by frequency
-
 words_to_frequency = count_unique_words(all_words)
 sort_by_key = sorted(words_to_frequency.items(), key=operator.itemgetter(0))
 pprint(sort_by_key)
