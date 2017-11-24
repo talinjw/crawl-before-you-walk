@@ -1,7 +1,9 @@
 import requests
 import bs4
 import pandas as pd
-# from datetime import datetime
+from datetime import datetime
+
+debug = False
 
 
 def get_jobs(soup):
@@ -127,12 +129,13 @@ def get_all_parameters_for_all_listings(url):
         else:
             break
 
-    # print('Print current # of jobs: ' + str(len(all_jobs)))
-    # print('Print current # of companies: ' + str(len(all_companies)))
-    # print('Print current # of locations: ' + str(len(all_locations)))
-    # print('Print current # of summaries: ' + str(len(all_summaries)))
-    # print('Print current # of ages: ' + str(len(all_ages)))
-    # print('Print current # of links: ' + str(len(all_links)))
+    if debug:
+        print('Print current # of jobs: ' + str(len(all_jobs)))
+        print('Print current # of companies: ' + str(len(all_companies)))
+        print('Print current # of locations: ' + str(len(all_locations)))
+        print('Print current # of summaries: ' + str(len(all_summaries)))
+        print('Print current # of ages: ' + str(len(all_ages)))
+        print('Print current # of links: ' + str(len(all_links)))
 
     df_all_parameters = pd.DataFrame(
         {'Job_Title': all_jobs,
@@ -144,15 +147,18 @@ def get_all_parameters_for_all_listings(url):
 
     return(df_all_parameters)
 
-# search_keyword = 'firefighter'
-# search_location = 'Bay Area, CA'
-# search_query = 'jobs?q=' + search_keyword + '&l=' + search_location
-# search_url = 'https://www.indeed.com/' + search_query
-# # print(search_url)
 
-# df_all_parameters = get_all_parameters_for_all_listings(search_url)
-# current_date = datetime.now()
+if __name__ == '__main__':
+    search_keyword = 'firefighter'
+    search_location = 'Bay Area, CA'
+    search_query = 'jobs?q=' + search_keyword + '&l=' + search_location
+    search_url = 'https://www.indeed.com/' + search_query
+    # print(search_url)
 
-# df_all_parameters.to_csv(
-#     current_date.strftime('%Y-%m-%d') + '_' + search_keyword.upper() + '.csv'
-#     )
+    df_all_parameters = get_all_parameters_for_all_listings(search_url)
+    current_date = datetime.now()
+
+    df_all_parameters.to_csv(
+        current_date.strftime('%Y-%m-%d') + '_'
+        + search_keyword.upper() + '.csv'
+        )
