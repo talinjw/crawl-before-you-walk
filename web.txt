@@ -9,6 +9,7 @@ app
 arial
 banner
 border
+child
 class
 cmp
 color
@@ -40,6 +41,7 @@ password
 push
 px
 return
+setting
 size
 span
 sync

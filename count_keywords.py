@@ -44,11 +44,14 @@ def clean(word):
     return(clean_word)
 
     
-def get_filter_status(word):
+def filter_by_property(word):
     if len(word) > 20 or len(word) < 2 or any(char.isdigit() for char in word) == True:
         return False
     else:
         return True
+
+def filter_by_word(list_of_words):
+ 
 
 
 def split_by_word(text_by_link):
@@ -58,7 +61,7 @@ def split_by_word(text_by_link):
             words_in_text = text.split()
             for word in words_in_text:
                 clean_word = clean(word)
-                if get_filter_status(clean_word) == True:
+                if filter_by_property(clean_word) == True:
                     all_words.append(clean_word)
 
     return(all_words)
