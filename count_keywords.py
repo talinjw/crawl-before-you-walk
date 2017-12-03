@@ -1,16 +1,20 @@
 import requests
 import bs4
 import operator
+import time
+
 from list_jobs import get_all_parameters_for_all_listings
 from pprint import pprint
 
 
 def get_text_all(links):
     # Provided a list of urls, get all text from each url
-    print('There are a total of {} links'.format(len(links)))
-    pprint(links)
 
+    total_number_of_links = len(links)
     text_by_link = []
+    failure_counter = 0
+
+    print('Out of {} links in total...'.format(total_number_of_links))
 
     for link in links:
         if 'http' in link:
@@ -28,7 +32,11 @@ def get_text_all(links):
 
         except:
             print("{} did not work for some reason.".format(url))
+            failure_counter = failure_counter + 1
             continue
+
+    print('{} were crawled successfully.'.format(
+            total_number_of_links - failure_counter))
 
     return(text_by_link)
 
@@ -73,11 +81,11 @@ def filter_by_relevance(words):
     relevant_list = []
 
     for word in words:
-        if len(word) < 12 and len(word) > 3 \
-            and any(char.isdigit() for char in word) == False:
-                if word not in top1k and word not in custom:
-                    if word in en_dict:
-                        relevant_list.append(word)
+        if len(word) < 12 and len(word) > 3 and \
+           any(char.isdigit() for char in word) is False:
+            if word not in top1k and word not in custom:
+                if word in en_dict:
+                    relevant_list.append(word)
 
     return(relevant_list)
 
@@ -107,26 +115,36 @@ def count_unique_words(list_of_words):
     return(unique_words)
 
 
+def get_words_by_freq(sort_type, search_url):
+    # Provided a search_string_url, return a dictionary containing words-b-freq
+    df_all_parameters = get_all_parameters_for_all_listings(search_url)
+    all_links = df_all_parameters['Link'].tolist()
+    all_words = split_by_word(get_text_all(all_links))
+    relevant_words = filter_by_relevance(all_words)
+    words_by_freq = count_unique_words(relevant_words)
+
+    print('Within the dictionay, there are {} unique words.'.format(
+          len(words_by_freq)))
+
+    if sort_type is 'key':
+        sort_key = sorted(words_by_freq.items(), key=operator.itemgetter(0))
+        pprint(sort_key)
+
+    elif sort_type is 'value':
+        sort_val = sorted(words_by_freq.items(), key=operator.itemgetter(1))
+        pprint(sort_val)
+
+    else:
+        print('No sort key specified.')
+
+
 if __name__ == '__main__':
 
     # Build search_query and get a dataframe containing all associated links
-    search_keyword = 'financial+analyst'
+    search_keyword = 'firefighter'
     search_location = 'Bay Area, CA'
     search_query = 'jobs?q=' + search_keyword + '&l=' + search_location
     search_url = 'https://www.indeed.com/' + search_query
     print(search_url)
 
-    df_all_parameters = get_all_parameters_for_all_listings(search_url)
-
-    # Tokenize all text; generate list of words
-    all_links = df_all_parameters['Link'].tolist()
-    all_words = split_by_word(get_text_all(all_links))
-    relevant_words = filter_by_relevance(all_words)
-
-    # Create dictionary; word by frequency
-    words_by_frequency = count_unique_words(relevant_words)
-
-    # sort_key = sorted(words_by_frequency.items(), key=operator.itemgetter(0))
-    # pprint(sort_key)
-    sort_val = sorted(words_by_frequency.items(), key=operator.itemgetter(1))
-    pprint(sort_val)
+    get_words_by_freq(None, search_url)
