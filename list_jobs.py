@@ -7,6 +7,7 @@ debug = False
 
 
 def get_jobs(soup):
+    # Extract all job titles from the soup
     jobs = []
     elements = soup.find_all(name='a', attrs={'data-tn-element': 'jobTitle'})
     for element in elements:
@@ -15,6 +16,7 @@ def get_jobs(soup):
 
 
 def get_companies(soup):
+    # Extract all company names from the soup
     companies = []
     spans = soup.find_all(name='span', attrs={'class': 'company'})
     for span in spans:
@@ -23,6 +25,7 @@ def get_companies(soup):
 
 
 def get_locations(soup):
+    # Extract all job locations from the soup
     locations = []
     spans = soup.findAll('span', attrs={'class': 'location'})
     for span in spans:
@@ -31,6 +34,7 @@ def get_locations(soup):
 
 
 def get_summaries(soup):
+    # Extract all job summaries from the soup
     summaries = []
     spans = soup.findAll('span', attrs={'class': 'summary'})
     for span in spans:
@@ -39,6 +43,7 @@ def get_summaries(soup):
 
 
 def get_ages(soup):
+    # Extract the age of all job postings from the soup
     ages = []
     divs = soup.find_all(name='div', attrs={'class': 'result-link-bar'})
     for div in divs:
@@ -51,6 +56,7 @@ def get_ages(soup):
 
 
 def get_links(soup):
+    # Extract all the job listing urls from the soup
     links = []
     elements = soup.find_all(name='a', attrs={'data-tn-element': 'jobTitle'})
     for element in elements:
@@ -59,6 +65,7 @@ def get_links(soup):
 
 
 def does_a_nextpage_exist(soup):
+    # Check whether there exists another page to browse
     spans = soup.find_all(name='span', attrs={'class': 'np'})
     for span in spans:
         if 'Next' in span.text:
@@ -69,6 +76,7 @@ def does_a_nextpage_exist(soup):
 
 
 def get_nextpage_url(soup):
+    # If another page exists, get the url
     div = soup.find(name='div', attrs={'class': 'pagination'})
     elements = div.find_all(name='a')
     nextpage_url = 'https://www.indeed.com/' + str(list(elements)[-1]['href'])
@@ -76,6 +84,7 @@ def get_nextpage_url(soup):
 
 
 def get_all_parameters_for_all_listings(url):
+    # Get all parameters from the soup and collect them in a dataframe
     response = requests.get(url)
     # print(response.status_code)
 
@@ -149,6 +158,8 @@ def get_all_parameters_for_all_listings(url):
 
 
 if __name__ == '__main__':
+    # Output all job parameters for a given query to CSV
+
     search_keyword = 'firefighter'
     search_location = 'Bay Area, CA'
     search_query = 'jobs?q=' + search_keyword + '&l=' + search_location
