@@ -1,13 +1,15 @@
 import requests
 import bs4
 import operator
-import time
 from list_jobs import get_all_parameters_for_all_listings
 from pprint import pprint
 
 
 def get_text_all(links):
     # Provided a list of urls, get all text from each url
+    print('There are a total of {} links'.format(len(links)))
+    pprint(links)
+
     text_by_link = []
 
     for link in links:
@@ -16,13 +18,18 @@ def get_text_all(links):
         else:
             url = 'https://' + link
 
-        response = requests.get(url, timeout=5)
-        html = response.text
-        soup = bs4.BeautifulSoup(html, 'html.parser')
-        all_text = soup.findAll(text=True)
-        page_text = all_text
-        text_by_link.append(page_text)
-        time.sleep(1)
+        try:
+            response = requests.get(url, timeout=5)
+            html = response.text
+            soup = bs4.BeautifulSoup(html, 'html.parser')
+            all_text = soup.findAll(text=True)
+            page_text = all_text
+            text_by_link.append(page_text)
+
+        except:
+            print("{} did not work for some reason.".format(url))
+            continue
+
     return(text_by_link)
 
 
@@ -33,11 +40,15 @@ def get_text_from_link(link):
     else:
         url = 'https://' + link
 
-    response = requests.get(url)
-    html = response.text
-    soup = bs4.BeautifulSoup(html, 'html.parser')
-    all_text = soup.findAll(text=True)
-    page_text = all_text
+    try:
+        response = requests.get(url)
+        html = response.text
+        soup = bs4.BeautifulSoup(html, 'html.parser')
+        all_text = soup.findAll(text=True)
+        page_text = all_text
+
+    except:
+        print("{} did not work for some reason.".format(url))
 
     return(page_text)
 
@@ -63,7 +74,7 @@ def filter_by_relevance(words):
 
     for word in words:
         if len(word) < 12 and len(word) > 3 \
-         and any(char.isdigit() for char in word) is False:
+            and any(char.isdigit() for char in word) == False:
                 if word not in top1k and word not in custom:
                     if word in en_dict:
                         relevant_list.append(word)
@@ -99,7 +110,7 @@ def count_unique_words(list_of_words):
 if __name__ == '__main__':
 
     # Build search_query and get a dataframe containing all associated links
-    search_keyword = 'firefighter'
+    search_keyword = 'financial+analyst'
     search_location = 'Bay Area, CA'
     search_query = 'jobs?q=' + search_keyword + '&l=' + search_location
     search_url = 'https://www.indeed.com/' + search_query
