@@ -1,5 +1,5 @@
 # You've Got To Crawl (Before You Walk)
-A project to learn Python; crawls indeed.com to enable interesting analysis on job listings.
+A project to learn Python3 and some web development; crawls indeed.com to enable interesting analysis on job listings.
 
 ![](/test.png?raw=true "Example output post-query; this spider was created from the search term 'firefighter' and location 'bay area.'")
 
