@@ -1,8 +1,8 @@
 import requests
 import bs4
 import operator
-import time
 
+from os import path
 from list_jobs import get_all_parameters_for_all_listings
 from pprint import pprint
 
@@ -23,7 +23,7 @@ def get_text_all(links):
             url = 'https://' + link
 
         try:
-            response = requests.get(url, timeout=5)
+            response = requests.get(url, timeout=3)
             html = response.text
             soup = bs4.BeautifulSoup(html, 'html.parser')
             all_text = soup.findAll(text=True)
@@ -69,13 +69,14 @@ def clean(word):
 
 def filter_by_relevance(words):
     # Exclude specific words and ensure all words are dict terms
-    with open('/home/talin/projects/p_keywords/top1k.txt') as f1:
+    d = path.dirname(__file__)
+    with open(path.join(d, 'app/static/site/top1k.txt')) as f1:
         top1k = set(line.strip() for line in f1)
 
-    with open('/home/talin/projects/p_keywords/custom.txt') as f2:
+    with open(path.join(d, 'app/static/site/custom.txt')) as f2:
         custom = set(line.strip() for line in f2)
 
-    with open('/home/talin/projects/p_keywords/en_dict.txt') as f3:
+    with open(path.join(d, 'app/static/site/en_dict.txt')) as f3:
         en_dict = set(line.lower().strip() for line in f3)
 
     relevant_list = []
@@ -137,10 +138,12 @@ def get_words_by_freq(sort_type, search_url):
     else:
         print('No sort key specified.')
 
+    return(words_by_freq)
+
 
 if __name__ == '__main__':
 
-    # Build search_query and get a dataframe containing all associated links
+    # Build search_url and get a dataframe containing all associated links
     search_keyword = 'firefighter'
     search_location = 'Bay Area, CA'
     search_query = 'jobs?q=' + search_keyword + '&l=' + search_location
