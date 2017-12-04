@@ -1,12 +1,16 @@
 # You've Got To Crawl (Before You Walk)
-My introductory project to Python; crawls indeed.com to enable interesting analysis on job listings by keyword and location.
+A project to learn Python; crawls indeed.com to enable interesting analysis on job listings.
 
-1. Allows the user to search by keyword/location via form; collects all listing parameters; outputs all listing parameters to an HTML table.
-2. Allows the user to search by keyword/location via form; collects the urls to all job postings; loops through the urls and stores all page text as an item within a list; counts all unique keyterms within the list; outputs the results of this analysis to an HTML table ordered by frequency.
+![](/test.png?raw=true "Example output post-query; this spider was created from the search term 'firefighter' and location 'bay area.'")
+
+1. Allows the user to search by keyword/location via form; outputs all listing parameters to an HTML table or CSV file.
+2. Allows the user to search by keyword/location via form; outputs the results of this analysis to a word cloud based on frequency.
 
 Uses a number of third-party modules, including:
 - requests
 - bs4
 - flask
+- pandas
+- wordcloud
 
 See requirements.txt for a list of all dependencies.
