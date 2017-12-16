@@ -1,12 +1,12 @@
 # You've Got To Crawl (Before You Walk)
-A project to learn python and some web development; crawls indeed.com to enable interesting analysis on job listings.
+A project to learn more about web development; crawls indeed.com to analyze job listings.
 
-![](/test.png?raw=true "Example output; dynamic generation of new spiders coming soon!")
+![](/test.png?raw=true "Example output; create your own spider!")
 
-1. Allows the user to search by keyword/location via form; outputs all listing parameters to an HTML table (optionally CSV).
-2. Allows the user to search by keyword/location via form; outputs the results of this analysis to a word cloud based on frequency.
+<b>Search by title or location:</b> output consists of job postings and their summary level parameters;
+a word cloud is also generated based on the frequency of key terms found within the first 300 listings.
 
-Uses a number of third-party libraries, including:
+This project uses a number of third-party libraries, including:
 - requests
 - bs4
 - flask
