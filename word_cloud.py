@@ -25,9 +25,9 @@ if __name__ == '__main__':
     # Setup mask
     d = path.dirname(__file__)
 
-    with Image.open(path.join(d, 'app/static/site/spider.png')) as mask_image:
-        new_image = Image.new('RGB', mask_image.size, (255, 255, 255))
-        new_image.paste(mask_image, mask_image)
+    with Image.open(path.join(d, 'static/images/data-spider-mask.png')) as img:
+        new_image = Image.new('RGB', img.size, (255, 255, 255))
+        new_image.paste(img, img)
         mask = np.array(new_image)
 
     # Setup WordCloud

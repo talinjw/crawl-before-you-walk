@@ -70,13 +70,13 @@ def clean(word):
 def filter_by_relevance(words):
     # Exclude specific words and ensure all words are dict terms
     d = path.dirname(__file__)
-    with open(path.join(d, 'app/static/site/top1k.txt')) as f1:
+    with open(path.join(d, 'static/top1k.txt')) as f1:
         top1k = set(line.strip() for line in f1)
 
-    with open(path.join(d, 'app/static/site/custom.txt')) as f2:
+    with open(path.join(d, 'static/custom.txt')) as f2:
         custom = set(line.strip() for line in f2)
 
-    with open(path.join(d, 'app/static/site/en_dict.txt')) as f3:
+    with open(path.join(d, 'static/en_dict.txt')) as f3:
         en_dict = set(line.lower().strip() for line in f3)
 
     relevant_list = []
@@ -124,7 +124,7 @@ def get_words_by_freq(sort_type, search_url):
     relevant_words = filter_by_relevance(all_words)
     words_by_freq = count_unique_words(relevant_words)
 
-    print('Within the dictionay, there are {} unique words.'.format(
+    print('Within the dictionary, there are {} unique words.'.format(
           len(words_by_freq)))
 
     if sort_type is 'key':
