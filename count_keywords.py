@@ -7,6 +7,17 @@ from list_jobs import get_all_parameters_for_all_listings
 from pprint import pprint
 
 
+d = path.join(path.dirname(__file__), 'static')
+with open(path.join(d, 'COMMON.txt')) as f1:
+    COMMON = set(line.strip() for line in f1)
+
+with open(path.join(d, 'CUSTOM.txt')) as f2:
+    CUSTOM = set(line.strip() for line in f2)
+
+with open(path.join(d, 'EN_DICT.txt')) as f3:
+    EN_DICT = set(line.lower().strip() for line in f3)
+
+
 def get_text_all(links):
     # Provided a list of urls, get all text from each url
 
@@ -69,23 +80,13 @@ def clean(word):
 
 def filter_by_relevance(words):
     # Exclude specific words and ensure all words are dict terms
-    d = path.dirname(__file__)
-    with open(path.join(d, 'static/top1k.txt')) as f1:
-        top1k = set(line.strip() for line in f1)
-
-    with open(path.join(d, 'static/custom.txt')) as f2:
-        custom = set(line.strip() for line in f2)
-
-    with open(path.join(d, 'static/en_dict.txt')) as f3:
-        en_dict = set(line.lower().strip() for line in f3)
-
     relevant_list = []
 
     for word in words:
         if len(word) < 12 and len(word) > 3 and \
            any(char.isdigit() for char in word) is False:
-            if word not in top1k and word not in custom:
-                if word in en_dict:
+            if word not in COMMON and word not in CUSTOM:
+                if word in EN_DICT:
                     relevant_list.append(word)
 
     return(relevant_list)
