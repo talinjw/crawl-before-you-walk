@@ -1,5 +1,6 @@
-from flask import Flask, render_template, flash, request, url_for, redirect
-# from list_jobs import get_all_parameters_for_all_listings
+from flask import Flask, render_template, flash, request
+import applog.list_jobs as jobs
+
 
 app = Flask(__name__)
 
@@ -21,9 +22,10 @@ def results():
     search_location = request.args.get('l')
     search_string = 'jobs?q=' + search_query + '&l=' + search_location
     search_url = 'https://www.indeed.com/' + search_string
-    # df_all_parameters = get_all_parameters_for_all_listings(search_url)
+    df_summary = jobs.get_all_parameters_for_all_listings(search_url)
 
-    flash(search_url)
+    import sys
+    flash(sys.path)
     return render_template('results.html')
 
 
