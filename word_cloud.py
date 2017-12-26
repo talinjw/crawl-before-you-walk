@@ -31,7 +31,7 @@ if __name__ == '__main__':
         mask = np.array(new_image)
 
     # Setup WordCloud
-    font_path = path.join(d, 'app/static/site/DIN_Condensed_Bold.ttf')
+    font_path = path.join(d, 'static/DIN_Condensed_Bold.ttf')
 
     wc = WordCloud(font_path=font_path,
                    background_color="white",

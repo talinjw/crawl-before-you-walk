@@ -3,7 +3,7 @@ import bs4
 import pandas as pd
 from datetime import datetime
 
-debug = False
+debug = True
 
 
 def get_jobs(soup):
