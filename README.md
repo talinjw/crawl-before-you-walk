@@ -1,5 +1,5 @@
 # You've Got To Crawl (Before You Walk)
-A project to learn more about web development; crawls indeed.com to analyze job listings.
+A project to learn more about the creation of web applications; crawls indeed.com to perform analysis on job listings.
 
 ![](/static/images/readme.png?raw=true "Example output; create your own spider!")
 
