@@ -23,8 +23,10 @@ def results():
     search_string = 'jobs?q=' + search_query + '&l=' + search_location
     search_url = 'https://www.indeed.com/' + search_string
     df = jobs.get_all_parameters_for_all_listings(search_url)
-    TABLE = df.to_html(classes='table table-hover', index=False)
+    del df['Link']
+    TABLE = df.to_html(classes='table table-hover', index=False, escape=False)
     flash(len(df))
+    flash(TABLE)
 
     import sys
     flash(sys.path)

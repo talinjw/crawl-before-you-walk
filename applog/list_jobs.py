@@ -11,7 +11,7 @@ def get_jobs(soup):
     jobs = []
     elements = soup.find_all(name='a', attrs={'data-tn-element': 'jobTitle'})
     for element in elements:
-            jobs.append(element['title'])
+            jobs.append(element['title'].strip())
     return(jobs)
 
 
@@ -150,8 +150,8 @@ def get_all_parameters_for_all_listings(url):
         print('Print current # of links: ' + str(len(all_links)))
 
     # Set display options for HTML table
-    pd.set_option('display.max_colwidth', 80)
-    pd.set_option('display.max_rows', 500)
+    pd.set_option('display.max_colwidth', 800)
+    pd.set_option('display.max_rows', 3000)
 
     df = pd.DataFrame(
         {'Job Title': all_jobs,
@@ -164,16 +164,22 @@ def get_all_parameters_for_all_listings(url):
     # Re-order df columns for readability
     df = df[[
         'Job Title',
+        'Link',
         'Posting Age',
         'Location',
         'Company Name',
         'Job Summary',
-        'Link']]
+        ]]
 
     # df.style.set_properties(subset=['Job Summary'], **{'width': '300px'})
     #   <a href="mailto:talin.wauchope@gmail.com" class="fa fa-envelope"></a>
-    df.style.format(create_hyperlink)
-    # df['Link'] = "<a href='https://" + df['Link'].astype(str) + "'>Link</a>"
+    # df.style.format(create_hyperlink)
+    df['Job Title'] = "<a href='https://" \
+        + df['Link'].astype(str) \
+        + "' target='_blank' >" \
+        + df['Job Title'].astype(str) \
+        + "</a>"
+
     df = df.replace(r'\n', ' ', regex=True)
     return(df)
 
