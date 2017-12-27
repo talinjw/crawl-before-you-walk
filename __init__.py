@@ -22,11 +22,14 @@ def results():
     search_location = request.args.get('l')
     search_string = 'jobs?q=' + search_query + '&l=' + search_location
     search_url = 'https://www.indeed.com/' + search_string
-    df_summary = jobs.get_all_parameters_for_all_listings(search_url)
+    df = jobs.get_all_parameters_for_all_listings(search_url)
+    df = df.replace(r'\n', ' ', regex=True)
+    TABLE = df.to_html(classes='table table-hover', index=False)
+    flash(len(df))
 
     import sys
     flash(sys.path)
-    return render_template('results.html')
+    return render_template('results.html', TABLE=TABLE)
 
 
 if __name__ == '__main__':

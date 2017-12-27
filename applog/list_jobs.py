@@ -146,11 +146,11 @@ def get_all_parameters_for_all_listings(url):
         print('Print current # of links: ' + str(len(all_links)))
 
     df_all_parameters = pd.DataFrame(
-        {'Job_Title': all_jobs,
-         'Company_Name': all_companies,
+        {'Job Title': all_jobs,
+         'Company Name': all_companies,
          'Location': all_locations,
-         'Job_Summary': all_summaries,
-         'Posting_Age': all_ages,
+         'Job Summary': all_summaries,
+         'Posting Age': all_ages,
          'Link': all_links})
 
     return(df_all_parameters)
