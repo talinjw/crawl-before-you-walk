@@ -82,6 +82,10 @@ def get_nextpage_url(soup):
     return(nextpage_url)
 
 
+def create_hyperlink(link):
+    return '<a href="https://{}">{}</a>'.format(link, "Link")
+
+
 def get_all_parameters_for_all_listings(url):
     # Get all parameters from the soup and collect them in a dataframe
     response = requests.get(url)
@@ -145,7 +149,11 @@ def get_all_parameters_for_all_listings(url):
         print('Print current # of ages: ' + str(len(all_ages)))
         print('Print current # of links: ' + str(len(all_links)))
 
-    df_all_parameters = pd.DataFrame(
+    # Set display options for HTML table
+    pd.set_option('display.max_colwidth', 80)
+    pd.set_option('display.max_rows', 500)
+
+    df = pd.DataFrame(
         {'Job Title': all_jobs,
          'Company Name': all_companies,
          'Location': all_locations,
@@ -153,7 +161,21 @@ def get_all_parameters_for_all_listings(url):
          'Posting Age': all_ages,
          'Link': all_links})
 
-    return(df_all_parameters)
+    # Re-order df columns for readability
+    df = df[[
+        'Job Title',
+        'Posting Age',
+        'Location',
+        'Company Name',
+        'Job Summary',
+        'Link']]
+
+    # df.style.set_properties(subset=['Job Summary'], **{'width': '300px'})
+    #   <a href="mailto:talin.wauchope@gmail.com" class="fa fa-envelope"></a>
+    df.style.format(create_hyperlink)
+    # df['Link'] = "<a href='https://" + df['Link'].astype(str) + "'>Link</a>"
+    df = df.replace(r'\n', ' ', regex=True)
+    return(df)
 
 
 # if __name__ == '__main__':

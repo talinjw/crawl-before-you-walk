@@ -23,7 +23,6 @@ def results():
     search_string = 'jobs?q=' + search_query + '&l=' + search_location
     search_url = 'https://www.indeed.com/' + search_string
     df = jobs.get_all_parameters_for_all_listings(search_url)
-    df = df.replace(r'\n', ' ', regex=True)
     TABLE = df.to_html(classes='table table-hover', index=False)
     flash(len(df))
 
@@ -33,4 +32,4 @@ def results():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
