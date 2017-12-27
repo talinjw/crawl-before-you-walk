@@ -26,7 +26,6 @@ def results():
     del df['Link']
     TABLE = df.to_html(classes='table table-hover', index=False, escape=False)
     flash(len(df))
-    flash(TABLE)
 
     import sys
     flash(sys.path)
