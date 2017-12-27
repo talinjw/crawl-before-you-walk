@@ -70,8 +70,7 @@ def does_a_nextpage_exist(soup):
     for span in spans:
         if 'Next' in span.text:
             return(True)
-        else:
-            return(False)
+    return(False)
 
 
 def get_nextpage_url(soup):
@@ -89,7 +88,7 @@ def create_hyperlink(link):
 def get_all_parameters_for_all_listings(url):
     # Get all parameters from the soup and collect them in a dataframe
     response = requests.get(url)
-    # print(response.status_code)
+    if debug: print(response.status_code)
 
     html = response.text
     soup = bs4.BeautifulSoup(html, 'html.parser')
@@ -124,16 +123,16 @@ def get_all_parameters_for_all_listings(url):
 
         # Check to see if this is the last page; if not, move to the next page
         nextpage_exists = does_a_nextpage_exist(soup)
-        # print(nextpage_exists)
+        if debug: print(nextpage_exists)
         if nextpage_exists is True:
             page_counter += 1
-            # print(page_counter)
+            if debug: print(page_counter)
 
             nextpage_url = get_nextpage_url(soup)
-            # print(nextpage_url)
+            if debug: print(nextpage_url)
 
             response = requests.get(nextpage_url)
-            # print(response.status_code)
+            if debug: print(response.status_code)
 
             html = response.text
             soup = bs4.BeautifulSoup(html, 'html.parser')
@@ -151,7 +150,7 @@ def get_all_parameters_for_all_listings(url):
 
     # Set display options for HTML table
     pd.set_option('display.max_colwidth', 800)
-    pd.set_option('display.max_rows', 3000)
+    pd.set_option('display.max_rows', 10000)
 
     df = pd.DataFrame(
         {'Job Title': all_jobs,
@@ -184,19 +183,19 @@ def get_all_parameters_for_all_listings(url):
     return(df)
 
 
-# if __name__ == '__main__':
-#     # Output all job parameters for a given query to CSV
-#
-#     search_keyword = 'firefighter'
-#     search_location = 'Bay Area, CA'
-#     search_query = 'jobs?q=' + search_keyword + '&l=' + search_location
-#     search_url = 'https://www.indeed.com/' + search_query
-#     # print(search_url)
-#
-#     df_all_parameters = get_all_parameters_for_all_listings(search_url)
-#     current_date = datetime.now()
-#
-#     df_all_parameters.to_csv(
-#         current_date.strftime('%Y-%m-%d') + '_'
-#         + search_keyword.upper() + '.csv'
-#         )
+if __name__ == '__main__':
+     # Output all job parameters for a given query to CSV
+
+     search_keyword = 'analyst'
+     search_location = 'Bay Area, CA'
+     search_query = 'jobs?q=' + search_keyword + '&l=' + search_location + '&filter=0'
+     search_url = 'https://www.indeed.com/' + search_query
+     print(search_url)
+
+     df_all_parameters = get_all_parameters_for_all_listings(search_url)
+     current_date = datetime.now()
+
+     df_all_parameters.to_csv(
+         current_date.strftime('%Y-%m-%d') + '_'
+         + search_keyword.upper() + '.csv'
+         )
