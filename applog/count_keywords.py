@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import requests
 import bs4
 import operator
@@ -7,26 +6,25 @@ from os import path
 from list_jobs import get_all_parameters_for_all_listings
 from pprint import pprint
 
+debug = True
 
-d = path.join(path.dirname(__file__), 'static')
+d = path.dirname(__file__)
+
 with open(path.join(d, 'COMMON.txt')) as f1:
     COMMON = set(line.strip() for line in f1)
 
-with open(path.join(d, 'CUSTOM.txt')) as f2:
-    CUSTOM = set(line.strip() for line in f2)
+with open(path.join(d, 'EN_DICT.txt')) as f2:
+    EN_DICT = set(line.lower().strip() for line in f2)
 
-with open(path.join(d, 'EN_DICT.txt')) as f3:
-    EN_DICT = set(line.lower().strip() for line in f3)
-
-
-def get_text_all(links):
+def get_text_all(links, max_links):
     # Provided a list of urls, get all text from each url
-
-    total_number_of_links = len(links)
     text_by_link = []
+    success_counter = 0
     failure_counter = 0
 
-    print('Out of {} links in total...'.format(total_number_of_links))
+    if debug:
+        total_number_of_links = len(links)
+        print('Out of {} links in total...'.format(total_number_of_links))
 
     for link in links:
         if 'http' in link:
@@ -41,14 +39,19 @@ def get_text_all(links):
             all_text = soup.findAll(text=True)
             page_text = all_text
             text_by_link.append(page_text)
-
+            success_counter = success_counter + 1
+            if success_counter == max_links:
+                break
+            
         except:
-            print("{} did not work for some reason.".format(url))
+            if debug:
+                print("{} did not work for some reason.".format(url))
             failure_counter = failure_counter + 1
             continue
 
-    print('{} were crawled successfully.'.format(
-            total_number_of_links - failure_counter))
+    if debug:
+        print('{} were crawled successfully.'.format(
+                success_counter))
 
     return(text_by_link)
 
@@ -68,7 +71,8 @@ def get_text_from_link(link):
         page_text = all_text
 
     except:
-        print("{} did not work for some reason.".format(url))
+        if debug:
+            print("{} did not work for some reason.".format(url))
 
     return(page_text)
 
@@ -83,6 +87,9 @@ def filter_by_relevance(words):
     # Exclude specific words and ensure all words are dict terms
     relevant_list = []
 
+    with open(path.join(d, 'CUSTOM.txt')) as f3:
+        CUSTOM = set(line.strip() for line in f3)
+    
     for word in words:
         if len(word) < 12 and len(word) > 3 and \
            any(char.isdigit() for char in word) is False:
@@ -118,27 +125,28 @@ def count_unique_words(list_of_words):
     return(unique_words)
 
 
-def get_words_by_freq(sort_type, search_url):
+def get_words_by_freq(sort_type, search_url, max_links):
     # Provided a search_string_url, return a dictionary containing words-b-freq
     df_all_parameters = get_all_parameters_for_all_listings(search_url)
     all_links = df_all_parameters['Link'].tolist()
-    all_words = split_by_word(get_text_all(all_links))
+    all_words = split_by_word(get_text_all(all_links, max_links))
     relevant_words = filter_by_relevance(all_words)
     words_by_freq = count_unique_words(relevant_words)
 
     print('Within the dictionary, there are {} unique words.'.format(
           len(words_by_freq)))
 
-    if sort_type is 'key':
-        sort_key = sorted(words_by_freq.items(), key=operator.itemgetter(0))
-        pprint(sort_key)
+    if debug:
+        if sort_type is 'key':
+            sort_key = sorted(words_by_freq.items(), key=operator.itemgetter(0))
+            pprint(sort_key)
 
-    elif sort_type is 'value':
-        sort_val = sorted(words_by_freq.items(), key=operator.itemgetter(1))
-        pprint(sort_val)
+        elif sort_type is 'value':
+            sort_val = sorted(words_by_freq.items(), key=operator.itemgetter(1))
+            pprint(sort_val)
 
-    else:
-        print('No sort key specified.')
+        else:
+            print('No sort key specified.')
 
     return(words_by_freq)
 
@@ -152,4 +160,4 @@ if __name__ == '__main__':
     search_url = 'https://www.indeed.com/' + search_query
     print(search_url)
 
-    get_words_by_freq(None, search_url)
+    get_words_by_freq(None, search_url, 5)
