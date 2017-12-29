@@ -1,5 +1,5 @@
 # You've Got To Crawl (Before You Walk)
-A project to learn more about the creation of web applications; crawls indeed.com to perform analysis on job listings.
+<a href="http://jobcrawl.net" target="_blank">A project to learn more about the creation of web applications&#59; crawls indeed.com to perform analysis on job listings.</a>
 
 ![](/static/images/readme.png?raw=true "Example output; create your own spider!")
 
