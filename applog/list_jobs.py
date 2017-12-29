@@ -175,16 +175,16 @@ def get_all_parameters_for_all_listings(url):
         'Job Summary',
         ]]
 
-    # df.style.set_properties(subset=['Job Summary'], **{'width': '300px'})
-    #   <a href="mailto:talin.wauchope@gmail.com" class="fa fa-envelope"></a>
-    # df.style.format(create_hyperlink)
+    # Create hyperlinks
     df['Job Title'] = "<a href='https://" \
         + df['Link'].astype(str) \
         + "' target='_blank' >" \
         + df['Job Title'].astype(str) \
         + "</a>"
 
+    # Cleanup the df + sort
     df = df.replace(r'\n', ' ', regex=True)
+    df = df.sort_values('Company Name')
     return(df)
 
 

@@ -1,14 +1,15 @@
 /* Format footer container */
-.g_footer {
-    position: fixed;
-    left: 0;
+#override-bs-footer .g-footer {
+    position: absolute;
+    right: 0;
     bottom: 0;
-    width: 100%;
+    left: 0;
+    /*background-color: #efefef;*/
     text-align: center;
 }
 
 /* Style icons */
-.fa {
+#override-bs-footer .fa {
     padding: 20px;
     font-size: 30px;
     width: 30px;
@@ -18,7 +19,7 @@
 }
 
 /* Add a hover effect */
-.fa:hover {
+#override-bs-footer .fa:hover {
     opacity: 0.7;
     text-decoration: none;
 {

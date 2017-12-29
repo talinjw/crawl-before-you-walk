@@ -25,7 +25,7 @@ def results():
     df = jobs.get_all_parameters_for_all_listings(search_url)
     del df['Link']
     TABLE = df.to_html(classes='table table-hover', index=False, escape=False)
-    flash(len(df))
+    flash('A total of ' + str(len(df)) + ' result(s) were found.')
 
     import sys
     flash(sys.path)
