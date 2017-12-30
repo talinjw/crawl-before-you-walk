@@ -135,16 +135,18 @@ def get_words_by_freq(links, sort_type, max_links):
 
     if sort_type is 'key':
         words_by_frequency = sorted(
-                d_words.items(),
-                key=operator.itemgetter(0),
-                reverse=True
-                )
+                                    d_words.items(),
+                                    key=operator.itemgetter(0),
+                                    reverse=True
+                                    )
+
     elif sort_type is 'value':
         words_by_frequency = sorted(
-                d_words.items(),
-                key=operator.itemgetter(1),
-                reverse=True
-                )
+                                    d_words.items(),
+                                    key=operator.itemgetter(1),
+                                    reverse=True
+                                    )
+
     else:
         words_by_frequency = d_words
 
@@ -161,8 +163,10 @@ if __name__ == '__main__':
     # Build search_url and get a dataframe containing all associated links
     search_keyword = 'firefighter'
     search_location = 'Bay Area, CA'
-    search_query = 'jobs?q=' + search_keyword + '&l=' + search_location
-    search_url = 'https://www.indeed.com/' + search_query
+    search_url = 'https://www.indeed.com/' + \
+                 'jobs?q=' + search_keyword + \
+                 '&l=' + search_location
+
     print(search_url)
 
     df = get_all_parameters_for_all_listings(search_url)

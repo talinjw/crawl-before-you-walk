@@ -39,8 +39,10 @@ if __name__ == '__main__':
     # Build a search_url and get a dict containing words and their freq
     search_keyword = 'firefighter'
     search_location = 'Bay Area, CA'
-    search_query = 'jobs?q=' + search_keyword + '&l=' + search_location
-    search_url = 'https://www.indeed.com/' + search_query
+    search_url = 'https://www.indeed.com/' + \
+                 'jobs?q=' + search_keyword + \
+                 '&l=' + search_location
+
     print(search_url)
 
     df = get_all_parameters_for_all_listings(search_url)

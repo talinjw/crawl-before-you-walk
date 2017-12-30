@@ -158,29 +158,30 @@ def get_all_parameters_for_all_listings(url):
     pd.set_option('display.max_rows', 10000)
 
     df = pd.DataFrame(
-        {'Job Title': all_jobs,
-         'Company': all_companies,
-         'Location': all_locations,
-         'Job Summary': all_summaries,
-         'Age': all_ages,
-         'Link': all_links})
+                     {'Job Title': all_jobs,
+                      'Company': all_companies,
+                      'Location': all_locations,
+                      'Job Summary': all_summaries,
+                      'Age': all_ages,
+                      'Link': all_links}
+                     )
 
     # Re-order df columns for readability
-    df = df[[
-        'Job Title',
-        'Link',
-        'Company',
-        'Location',
-        'Age',
-        'Job Summary'
-        ]]
+    df = df[
+            ['Job Title',
+             'Link',
+             'Company',
+             'Location',
+             'Age',
+             'Job Summary']
+           ]
 
     # Create hyperlinks
     df['Job Title'] = "<a href='https://" \
-        + df['Link'].astype(str) \
-        + "' target='_blank' >" \
-        + df['Job Title'].astype(str) \
-        + "</a>"
+                      + df['Link'].astype(str) \
+                      + "' target='_blank' >" \
+                      + df['Job Title'].astype(str) \
+                      + "</a>"
 
     # Cleanup the df + sort
     df = df.replace(r'\n', ' ', regex=True)
@@ -193,8 +194,10 @@ if __name__ == '__main__':
 
     search_q = 'analyst'
     search_l = 'Bay Area, CA'
-    search_query = 'jobs?q=' + search_q + '&l=' + search_l + '&filter=0'
-    search_url = 'https://www.indeed.com/' + search_query
+    search_url = 'https://www.indeed.com/' + \
+                 'jobs?q=' + search_q + \
+                 '&l=' + search_l
+
     print(search_url)
 
     df_all_parameters = get_all_parameters_for_all_listings(search_url)

@@ -22,8 +22,9 @@ def results():
     render_template('loader.html')
     search_query = request.args.get('q')
     search_location = request.args.get('l')
-    search_string = 'jobs?q=' + search_query + '&l=' + search_location
-    search_url = 'https://www.indeed.com/' + search_string
+    search_url = 'https://www.indeed.com/' + \
+                 'jobs?q=' + search_query + \
+                 '&l=' + search_location
 
     # Get primary dataframe
     df = jobs.get_all_parameters_for_all_listings(search_url)
@@ -31,10 +32,10 @@ def results():
 
     # Get dictionary of words by frequency
     words_by_frequency = keywords.get_words_by_freq(
-                df['Link'].tolist(),
-                None,
-                5
-                )
+                                                    df['Link'].tolist(),
+                                                    None,
+                                                    5)
+
     flash(words_by_frequency)
 
     # Generate wordcloud
@@ -43,10 +44,10 @@ def results():
     # Clean up the table to be displayed
     del df['Link']
     TABLE = df.to_html(
-        classes='table table-hover',
-        index=False,
-        escape=False
-        )
+                       classes='table table-hover',
+                       index=False,
+                       escape=False
+                       )
 
     return render_template('results.html', TABLE=TABLE)
 
