@@ -9,19 +9,14 @@ html {
   box-sizing: inherit;
 }
 
-/* Format the body */
 body {
     position: relative;
     margin: 0;
     padding-bottom: 6rem;
     min-height: 100%;
     font-family: "Helvetica Neue", Arial, sans-serif;
-     /*margin: 0;
-     padding: 0;
-     text-align: center;*/
 }
 
-/* Format main container */
 #override-bs-body .home-container {
     margin: 0 auto;
     padding-top: 12%;
@@ -29,21 +24,4 @@ body {
     padding-left: 5%;
     max-width: 1000px;
     width: 100%;
-    /*margin:10% auto;*/
-    /*width:100%;
-    height: 100%;
-    position: fixed;
-    padding:10px;*/
 }
-
-/*#main-form {
-    width:764px;
-    margin:0 auto;
-}*/
-
-/* Style the main_logo somewhat differently; skew left */
-/*#override-bs-body .main-container #main-logo {
-    display: block;
-    margin-left: 30%;
-    margin-right: auto;
-}*/

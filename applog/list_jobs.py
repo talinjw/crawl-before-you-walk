@@ -20,7 +20,7 @@ def get_companies(soup):
     companies = []
     spans = soup.find_all(name='span', attrs={'class': 'company'})
     for span in spans:
-        companies.append(span.text)
+        companies.append(span.text.upper().strip())
     return(companies)
 
 
@@ -29,7 +29,7 @@ def get_locations(soup):
     locations = []
     spans = soup.findAll('span', attrs={'class': 'location'})
     for span in spans:
-        locations.append(span.text)
+        locations.append(span.text.strip())
     return(locations)
 
 
@@ -38,7 +38,7 @@ def get_summaries(soup):
     summaries = []
     spans = soup.findAll('span', attrs={'class': 'summary'})
     for span in spans:
-        summaries.append(span.text)
+        summaries.append(span.text.strip())
     return(summaries)
 
 
@@ -49,7 +49,7 @@ def get_ages(soup):
     for div in divs:
         span = div.find(name='span', attrs={'class': 'date'})
         if span is not None:
-            ages.append(span.text)
+            ages.append(span.text.strip())
         else:
             ages.append("No age found")
     return(ages)
@@ -159,20 +159,20 @@ def get_all_parameters_for_all_listings(url):
 
     df = pd.DataFrame(
         {'Job Title': all_jobs,
-         'Company Name': all_companies,
+         'Company': all_companies,
          'Location': all_locations,
          'Job Summary': all_summaries,
-         'Posting Age': all_ages,
+         'Age': all_ages,
          'Link': all_links})
 
     # Re-order df columns for readability
     df = df[[
         'Job Title',
         'Link',
-        'Posting Age',
+        'Company',
         'Location',
-        'Company Name',
-        'Job Summary',
+        'Age',
+        'Job Summary'
         ]]
 
     # Create hyperlinks
@@ -184,16 +184,16 @@ def get_all_parameters_for_all_listings(url):
 
     # Cleanup the df + sort
     df = df.replace(r'\n', ' ', regex=True)
-    df = df.sort_values('Company Name')
+    df = df.sort_values('Company')
     return(df)
 
 
 if __name__ == '__main__':
     # Output all job parameters for a given query to CSV
 
-    search_keyword = 'analyst'
-    search_location = 'Bay Area, CA'
-    search_query = 'jobs?q=' + search_keyword + '&l=' + search_location + '&filter=0'
+    search_q = 'analyst'
+    search_l = 'Bay Area, CA'
+    search_query = 'jobs?q=' + search_q + '&l=' + search_l + '&filter=0'
     search_url = 'https://www.indeed.com/' + search_query
     print(search_url)
 
@@ -202,5 +202,5 @@ if __name__ == '__main__':
 
     df_all_parameters.to_csv(
         current_date.strftime('%Y-%m-%d') + '_'
-        + search_keyword.upper() + '.csv'
+        + search_q.upper() + '.csv'
     )

@@ -6,7 +6,7 @@ from os import path
 from list_jobs import get_all_parameters_for_all_listings
 from pprint import pprint
 
-debug = True
+debug = False
 
 d = path.dirname(__file__)
 
@@ -15,6 +15,7 @@ with open(path.join(d, 'COMMON.txt')) as f1:
 
 with open(path.join(d, 'EN_DICT.txt')) as f2:
     EN_DICT = set(line.lower().strip() for line in f2)
+
 
 def get_text_all(links, max_links):
     # Provided a list of urls, get all text from each url
@@ -42,7 +43,7 @@ def get_text_all(links, max_links):
             success_counter = success_counter + 1
             if success_counter == max_links:
                 break
-            
+
         except:
             if debug:
                 print("{} did not work for some reason.".format(url))
@@ -89,7 +90,7 @@ def filter_by_relevance(words):
 
     with open(path.join(d, 'CUSTOM.txt')) as f3:
         CUSTOM = set(line.strip() for line in f3)
-    
+
     for word in words:
         if len(word) < 12 and len(word) > 3 and \
            any(char.isdigit() for char in word) is False:
@@ -131,24 +132,24 @@ def get_words_by_freq(sort_type, search_url, max_links):
     all_links = df_all_parameters['Link'].tolist()
     all_words = split_by_word(get_text_all(all_links, max_links))
     relevant_words = filter_by_relevance(all_words)
-    words_by_freq = count_unique_words(relevant_words)
+    w_by_freq = count_unique_words(relevant_words)
 
     print('Within the dictionary, there are {} unique words.'.format(
-          len(words_by_freq)))
+          len(w_by_freq)))
 
     if debug:
         if sort_type is 'key':
-            sort_key = sorted(words_by_freq.items(), key=operator.itemgetter(0))
+            sort_key = sorted(w_by_freq.items(), key=operator.itemgetter(0))
             pprint(sort_key)
 
         elif sort_type is 'value':
-            sort_val = sorted(words_by_freq.items(), key=operator.itemgetter(1))
+            sort_val = sorted(w_by_freq.items(), key=operator.itemgetter(1))
             pprint(sort_val)
 
         else:
             print('No sort key specified.')
 
-    return(words_by_freq)
+    return(w_by_freq)
 
 
 if __name__ == '__main__':
