@@ -126,30 +126,33 @@ def count_unique_words(list_of_words):
     return(unique_words)
 
 
-def get_words_by_freq(sort_type, search_url, max_links):
+def get_words_by_freq(links, sort_type, max_links):
     # Provided a search_string_url, return a dictionary containing words-b-freq
-    df_all_parameters = get_all_parameters_for_all_listings(search_url)
-    all_links = df_all_parameters['Link'].tolist()
-    all_words = split_by_word(get_text_all(all_links, max_links))
+    all_words = split_by_word(get_text_all(links, max_links))
     relevant_words = filter_by_relevance(all_words)
-    w_by_freq = count_unique_words(relevant_words)
+    d_words = count_unique_words(relevant_words)
 
-    print('Within the dictionary, there are {} unique words.'.format(
-          len(w_by_freq)))
+    if sort_type is 'key':
+        words_by_frequency = sorted(
+                d_words.items(),
+                key=operator.itemgetter(0),
+                reverse=True
+                )
+    elif sort_type is 'value':
+        words_by_frequency = sorted(
+                d_words.items(),
+                key=operator.itemgetter(1),
+                reverse=True
+                )
+    else:
+        words_by_frequency = d_words
 
     if debug:
-        if sort_type is 'key':
-            sort_key = sorted(w_by_freq.items(), key=operator.itemgetter(0))
-            pprint(sort_key)
+        print('Within the dictionary, there are {} unique words.'.format(
+            len(d_words)))
+        pprint(words_by_frequency)
 
-        elif sort_type is 'value':
-            sort_val = sorted(w_by_freq.items(), key=operator.itemgetter(1))
-            pprint(sort_val)
-
-        else:
-            print('No sort key specified.')
-
-    return(w_by_freq)
+    return(words_by_frequency)
 
 
 if __name__ == '__main__':
@@ -161,4 +164,6 @@ if __name__ == '__main__':
     search_url = 'https://www.indeed.com/' + search_query
     print(search_url)
 
-    get_words_by_freq(None, search_url, 5)
+    df = get_all_parameters_for_all_listings(search_url)
+    links = df['Link'].tolist()
+    get_words_by_freq(links, None, 5)
