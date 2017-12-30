@@ -1,19 +1,20 @@
 import requests
 import bs4
 import operator
+import os
 
-from os import path
 from list_jobs import get_all_parameters_for_all_listings
 from pprint import pprint
 
 debug = False
 
-d = path.dirname(__file__)
+d = os.path.dirname(__file__)
+static_path = os.path.abspath(os.path.join(d, '..', 'static'))
 
-with open(path.join(d, 'COMMON.txt')) as f1:
+with open(os.path.join(static_path, 'COMMON.txt')) as f1:
     COMMON = set(line.strip() for line in f1)
 
-with open(path.join(d, 'EN_DICT.txt')) as f2:
+with open(os.path.join(static_path, 'EN_DICT.txt')) as f2:
     EN_DICT = set(line.lower().strip() for line in f2)
 
 
@@ -88,7 +89,7 @@ def filter_by_relevance(words):
     # Exclude specific words and ensure all words are dict terms
     relevant_list = []
 
-    with open(path.join(d, 'CUSTOM.txt')) as f3:
+    with open(os.path.join(static_path, 'CUSTOM.txt')) as f3:
         CUSTOM = set(line.strip() for line in f3)
 
     for word in words:
