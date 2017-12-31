@@ -1,9 +1,15 @@
 from flask import Flask, render_template, flash, request
+from datetime import datetime
+import os
+
 import applog.list_jobs as jobs
 import applog.count_keywords as keywords
 import applog.generate_wordcloud as cloud
 
 app = Flask(__name__)
+
+d = os.path.dirname(__file__)
+static_path = os.path.abspath(os.path.join(d, 'static', 'images'))
 
 
 @app.route('/')
@@ -34,22 +40,34 @@ def results():
     words_by_frequency = keywords.get_words_by_freq(
                                                     df['Link'].tolist(),
                                                     None,
-                                                    5)
+                                                    100
+                                                    )
 
-    flash(words_by_frequency)
+    # flash(words_by_frequency)
 
-    # Generate wordcloud
-    # wordcloud = cloud.generate_wordcloud(words_by_frequency)
+    # Create a unique name for dynamically generated spider_png
+    current_dt = datetime.now()
+    spider_name = current_dt.strftime('%Y-%m-%d') \
+        + '_' \
+        + search_query.strip()\
+        + '.png'
+
+    png_path = os.path.join(static_path, spider_name)
+
+    # If the PNG does not already exist, then generate new wordcloud
+    if os.path.exists(png_path) is False:
+        wordcloud = cloud.generate_wordcloud(words_by_frequency)
+        wordcloud.to_file(png_path)
 
     # Clean up the table to be displayed
     del df['Link']
-    TABLE = df.to_html(
+    table = df.to_html(
                        classes='table table-hover',
                        index=False,
                        escape=False
                        )
 
-    return render_template('results.html', TABLE=TABLE)
+    return render_template('results.html', TABLE=table, PNG=spider_name)
 
 
 @app.route('/loading/')

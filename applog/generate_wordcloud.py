@@ -24,9 +24,9 @@ def generate_wordcloud(d_words):
     wordcloud = WordCloud(
                           font_path=font_path,
                           background_color='white',
-                          max_words=2000,
+                          max_words=3000,
                           mask=mask,
-                          max_font_size=300,
+                          max_font_size=500,
                           random_state=42
                           )
 

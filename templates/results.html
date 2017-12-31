@@ -38,15 +38,15 @@
         <br>
         <div class="container-fluid">
             <ul class="nav nav-tabs">
-                <li style="width: 120px;" class="active"><a data-toggle="tab" href="#wordcloud"><font size="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;By Frequency</b></font></a></li>
-                <li style="width: 120px;"><a data-toggle="tab" href="#summary"><font size="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Summary</b></font></a></li>
+                <li style="width: 120px;" class="active"><a data-toggle="tab" href="#summary"><font size="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Summary</b></font></a></li>
+                <li style="width: 120px;"><a data-toggle="tab" href="#wordcloud"><font size="1"><b>&nbsp;&nbsp;&nbsp;&nbsp;Wordcloud</b></font></a></li>
             </ul>
             <div class="tab-content">
-                <div class="tab-pane fade in active" id="wordcloud">
-                    <p>&nbsp;&nbsp;&nbsp;A wordcloud goes here.</p>
-                </div>
-                <div class="tab-pane fade" id="summary">
+                <div class="tab-pane fade in active" id="summary">
                     {{TABLE | safe}}
+                </div>
+                <div class="tab-pane fade" id="wordcloud">
+                    <img id="data-spider" src="/static/images/{{PNG}}">
                 </div>
             </div>
         </div>
