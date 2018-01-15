@@ -15,11 +15,11 @@ This project uses a number of third-party libraries, including:
 
 See requirements.txt for a list of all dependencies. <br>
 
-<b> Screenshot of the Main Page </b>
+<b><i>Main Page </i></b>
 ![](/static/images/Main.png?raw=true "Oh, so fancy!") <br> <br>
 
-<b> Screenshot of the Summary Table </b>
+<b><i> Summary Table </i></b>
 ![](/static/images/Table.png?raw=true "Oh, so tabular!") <br> <br>
 
-<b> Screenshot of the WordCloud </b>
+<b><i> WordCloud </i></b>
 ![](/static/images/Spider.png?raw=true "Your very own creep-crawly data spider!")
