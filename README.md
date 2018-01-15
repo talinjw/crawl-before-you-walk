@@ -15,6 +15,11 @@ This project uses a number of third-party libraries, including:
 
 See requirements.txt for a list of all dependencies. <br>
 
-![](/static/images/Main.png?raw=true "Screenshot of the main page.")
-![](/static/images/Table.png?raw=true "Table containing all summary level parameters.")
-![](/static/images/Spider.png?raw=true "Data spider wordcloud generated on the basis of word frequency.")
+<b> Screenshot of the Main Page </b>
+![](/static/images/Main.png?raw=true "Oh, so fancy!") <br> <br>
+
+<b> Screenshot of the Summary Table </b>
+![](/static/images/Table.png?raw=true "Oh, so tabular!") <br> <br>
+
+<b> Screenshot of the WordCloud </b>
+![](/static/images/Spider.png?raw=true "Your very own creep-crawly data spider!")
