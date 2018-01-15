@@ -13,4 +13,8 @@ This project uses a number of third-party libraries, including:
 - pandas
 - wordcloud
 
-See requirements.txt for a list of all dependencies.
+See requirements.txt for a list of all dependencies. <br>
+
+![](/static/images/Main.png?raw=true "Screenshot of the main page.")
+![](/static/images/Table.png?raw=true "Table containing all summary level parameters.")
+![](/static/images/Spider.png?raw=true "Data spider wordcloud generated on the basis of word frequency.")
