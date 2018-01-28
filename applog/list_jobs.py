@@ -3,64 +3,93 @@ import bs4
 import pandas as pd
 from datetime import datetime
 
-debug = False
-
 
 def get_jobs(soup):
     # Extract all job titles from the soup
     jobs = []
     elements = soup.find_all(name='a', attrs={'data-tn-element': 'jobTitle'})
     for element in elements:
-            jobs.append(element['title'].strip())
+        jobs.append(element['title'].strip())
     return(jobs)
 
 
-def get_companies(soup):
+def get_companies(soup, number_of_jobs):
     # Extract all company names from the soup
     companies = []
     spans = soup.find_all(name='span', attrs={'class': 'company'})
-    for span in spans:
-        companies.append(span.text.upper().strip())
+    if not spans:
+        for company in range(number_of_jobs):
+            companies.append('Company name not found.')
+            
+    else:
+        for span in spans:
+            companies.append(span.text.upper().strip())
+
     return(companies)
 
 
-def get_locations(soup):
+def get_locations(soup, number_of_jobs):
     # Extract all job locations from the soup
     locations = []
     spans = soup.findAll('span', attrs={'class': 'location'})
-    for span in spans:
-        locations.append(span.text.strip())
+    if not spans:
+        for location in range(number_of_jobs):
+            locations.append('Location not found.')
+
+    else:
+        for span in spans:
+            locations.append(span.text.strip())
+            
     return(locations)
 
 
-def get_summaries(soup):
+def get_summaries(soup, number_of_jobs):
     # Extract all job summaries from the soup
     summaries = []
     spans = soup.findAll('span', attrs={'class': 'summary'})
-    for span in spans:
-        summaries.append(span.text.strip())
+    if not spans:
+        for summary in range(number_of_jobs):
+            summaries.append('Summary not found.')
+
+    else:
+        for span in spans:
+            summaries.append(span.text.strip())
+            
     return(summaries)
 
 
-def get_ages(soup):
+def get_ages(soup, number_of_jobs):
     # Extract the age of all job postings from the soup
     ages = []
     divs = soup.find_all(name='div', attrs={'class': 'result-link-bar'})
-    for div in divs:
-        span = div.find(name='span', attrs={'class': 'date'})
-        if span is not None:
-            ages.append(span.text.strip())
-        else:
-            ages.append("No age found")
+    if not divs:
+        for age in range(number_of_jobs):
+            ages.append('No age found.')
+
+    else:
+        for div in divs:
+            span = div.find(name='span', attrs={'class': 'date'})
+            if span is not None:
+                ages.append(span.text.strip())
+
+            else:
+                ages.append('No age found.')
+                    
     return(ages)
 
 
-def get_links(soup):
+def get_links(soup, number_of_jobs):
     # Extract all the job listing urls from the soup
     links = []
     elements = soup.find_all(name='a', attrs={'data-tn-element': 'jobTitle'})
-    for element in elements:
+    if not elements:
+        for link in range(number_of_jobs):
+            links.append('Link not found.')
+
+    else:
+        for element in elements:
             links.append('www.indeed.com' + str(element['href']))
+            
     return(links)
 
 
@@ -106,21 +135,23 @@ def get_all_parameters_for_all_listings(url):
     while True:
         currentpage_jobs = get_jobs(soup)
         all_jobs.extend(currentpage_jobs)
-
-        currentpage_companies = get_companies(soup)
+        number_of_jobs = len(currentpage_jobs)
+        
+        currentpage_companies = get_companies(soup, number_of_jobs)
         all_companies.extend(currentpage_companies)
-
-        currentpage_locations = get_locations(soup)
+        
+        currentpage_locations = get_locations(soup, number_of_jobs)
         all_locations.extend(currentpage_locations)
 
-        currentpage_summaries = get_summaries(soup)
+        currentpage_summaries = get_summaries(soup, number_of_jobs)
         all_summaries.extend(currentpage_summaries)
-
-        currentpage_ages = get_ages(soup)
+        
+        currentpage_ages = get_ages(soup, number_of_jobs)
         all_ages.extend(currentpage_ages)
 
-        currentpage_links = get_links(soup)
+        currentpage_links = get_links(soup, number_of_jobs)
         all_links.extend(currentpage_links)
+
 
         # Check to see if this is the last page; if not, move to the next page
         nextpage_exists = does_a_nextpage_exist(soup)
@@ -128,16 +159,13 @@ def get_all_parameters_for_all_listings(url):
             print(nextpage_exists)
         if nextpage_exists is True:
             page_counter += 1
-            if debug:
-                print(page_counter)
+            if debug: print(page_counter)
 
             nextpage_url = get_nextpage_url(soup)
-            if debug:
-                print(nextpage_url)
+            if debug: print(nextpage_url)
 
             response = requests.get(nextpage_url)
-            if debug:
-                print(response.status_code)
+            if debug: print(response.status_code)
 
             html = response.text
             soup = bs4.BeautifulSoup(html, 'html.parser')
@@ -191,6 +219,7 @@ def get_all_parameters_for_all_listings(url):
 
 if __name__ == '__main__':
     # Output all job parameters for a given query to CSV
+    debug = True
 
     search_q = 'analyst'
     search_l = 'Bay Area, CA'
@@ -198,7 +227,7 @@ if __name__ == '__main__':
                  'jobs?q=' + search_q + \
                  '&l=' + search_l
 
-    print(search_url)
+    if debug: print(search_url)
 
     df_all_parameters = get_all_parameters_for_all_listings(search_url)
     current_date = datetime.now()
