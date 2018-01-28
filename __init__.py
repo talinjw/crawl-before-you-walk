@@ -9,7 +9,7 @@ import applog.generate_wordcloud as cloud
 app = Flask(__name__)
 
 d = os.path.dirname(__file__)
-static_path = os.path.abspath(os.path.join(d, 'static', 'images'))
+static_path = os.path.abspath(os.path.join(d, 'static', 'images', 'spiders'))
 
 
 @app.route('/')
@@ -26,31 +26,31 @@ def about():
 @app.route('/search-results/', methods=['GET'])
 def results():
     render_template('loader.html')
-    search_query = request.args.get('q')
-    search_location = request.args.get('l')
-    search_url = 'https://www.indeed.com/' + \
-                 'jobs?q=' + search_query + \
-                 '&l=' + search_location
+    search_q = request.args.get('q')
+    search_l = request.args.get('l')
+    search_url = ('https://www.indeed.com/jobs?q={}&l={}'.format(search_q,
+                                                                 search_l))
+
+    # Impose a limit on the number of pages returned
+    max_pages = 1
 
     # Get primary dataframe
-    df = jobs.get_all_parameters_for_all_listings(search_url)
-    flash(str(len(df)) + ' result(s) were found.')
+    df = jobs.get_all_parameters_for_all_listings(search_url, max_pages)
+    results_returned = len(df)
+    flash('{} result(s) were found.'.format(
+          results_returned))
 
     # Get dictionary of words by frequency
-    words_by_frequency = keywords.get_words_by_freq(
-                                                    df['Link'].tolist(),
+    words_by_frequency = keywords.get_words_by_freq(df['Link'].tolist(),
                                                     None,
-                                                    100
-                                                    )
+                                                    100)
 
     # flash(words_by_frequency)
 
     # Create a unique name for dynamically generated spider_png
     current_dt = datetime.now()
-    spider_name = current_dt.strftime('%Y-%m-%d') \
-        + '_' \
-        + search_query.strip()\
-        + '.png'
+    spider_name = '{}_{}.png'.format(current_dt.strftime('%Y-%m-%d'),
+                                     search_q.strip())
 
     png_path = os.path.join(static_path, spider_name)
 
@@ -61,11 +61,9 @@ def results():
 
     # Clean up the table to be displayed
     del df['Link']
-    table = df.to_html(
-                       classes='table table-hover',
+    table = df.to_html(classes='table table-hover',
                        index=False,
-                       escape=False
-                       )
+                       escape=False)
 
     return render_template('results.html', TABLE=table, PNG=spider_name)
 
@@ -76,4 +74,4 @@ def loader():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()

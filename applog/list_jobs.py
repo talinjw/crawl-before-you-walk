@@ -3,6 +3,8 @@ import bs4
 import pandas as pd
 from datetime import datetime
 
+debug = False
+
 
 def get_jobs(soup):
     # Extract all job titles from the soup
@@ -20,7 +22,7 @@ def get_companies(soup, number_of_jobs):
     if not spans:
         for company in range(number_of_jobs):
             companies.append('Company name not found.')
-            
+
     else:
         for span in spans:
             companies.append(span.text.upper().strip())
@@ -39,7 +41,7 @@ def get_locations(soup, number_of_jobs):
     else:
         for span in spans:
             locations.append(span.text.strip())
-            
+
     return(locations)
 
 
@@ -49,12 +51,12 @@ def get_summaries(soup, number_of_jobs):
     spans = soup.findAll('span', attrs={'class': 'summary'})
     if not spans:
         for summary in range(number_of_jobs):
-            summaries.append('Summary not found.')
+            summaries.append('A summary was not found.')
 
     else:
         for span in spans:
             summaries.append(span.text.strip())
-            
+
     return(summaries)
 
 
@@ -74,7 +76,7 @@ def get_ages(soup, number_of_jobs):
 
             else:
                 ages.append('No age found.')
-                    
+
     return(ages)
 
 
@@ -89,7 +91,7 @@ def get_links(soup, number_of_jobs):
     else:
         for element in elements:
             links.append('www.indeed.com' + str(element['href']))
-            
+
     return(links)
 
 
@@ -114,7 +116,7 @@ def create_hyperlink(link):
     return '<a href="https://{}">{}</a>'.format(link, "Link")
 
 
-def get_all_parameters_for_all_listings(url):
+def get_all_parameters_for_all_listings(url, max_pages):
     # Get all parameters from the soup and collect them in a dataframe
     response = requests.get(url)
     if debug:
@@ -136,36 +138,39 @@ def get_all_parameters_for_all_listings(url):
         currentpage_jobs = get_jobs(soup)
         all_jobs.extend(currentpage_jobs)
         number_of_jobs = len(currentpage_jobs)
-        
+
         currentpage_companies = get_companies(soup, number_of_jobs)
         all_companies.extend(currentpage_companies)
-        
+
         currentpage_locations = get_locations(soup, number_of_jobs)
         all_locations.extend(currentpage_locations)
 
         currentpage_summaries = get_summaries(soup, number_of_jobs)
         all_summaries.extend(currentpage_summaries)
-        
+
         currentpage_ages = get_ages(soup, number_of_jobs)
         all_ages.extend(currentpage_ages)
 
         currentpage_links = get_links(soup, number_of_jobs)
         all_links.extend(currentpage_links)
 
-
         # Check to see if this is the last page; if not, move to the next page
         nextpage_exists = does_a_nextpage_exist(soup)
         if debug:
             print(nextpage_exists)
-        if nextpage_exists is True:
+
+        if nextpage_exists is True and page_counter < max_pages:
             page_counter += 1
-            if debug: print(page_counter)
+            if debug:
+                print(page_counter)
 
             nextpage_url = get_nextpage_url(soup)
-            if debug: print(nextpage_url)
+            if debug:
+                print(nextpage_url)
 
             response = requests.get(nextpage_url)
-            if debug: print(response.status_code)
+            if debug:
+                print(response.status_code)
 
             html = response.text
             soup = bs4.BeautifulSoup(html, 'html.parser')
@@ -174,12 +179,12 @@ def get_all_parameters_for_all_listings(url):
             break
 
     if debug:
-        print('Print current # of jobs: ' + str(len(all_jobs)))
-        print('Print current # of companies: ' + str(len(all_companies)))
-        print('Print current # of locations: ' + str(len(all_locations)))
-        print('Print current # of summaries: ' + str(len(all_summaries)))
-        print('Print current # of ages: ' + str(len(all_ages)))
-        print('Print current # of links: ' + str(len(all_links)))
+        print('Print # of jobs: {}'.format(str(len(all_jobs))))
+        print('Print # of companies: {}'.format(str(len(all_companies))))
+        print('Print # of locations: {}'.format(str(len(all_locations))))
+        print('Print # of summaries: {}'.format(str(len(all_summaries))))
+        print('Print # of ages: {}'.format(str(len(all_ages))))
+        print('Print # of links: {}'.format(str(len(all_links))))
 
     # Set display options for HTML table
     pd.set_option('display.max_colwidth', 1500)
@@ -211,7 +216,7 @@ def get_all_parameters_for_all_listings(url):
                       + df['Job Title'].astype(str) \
                       + "</a>"
 
-    # Cleanup the df + sort
+    # Clean up the dataframe + sort
     df = df.replace(r'\n', ' ', regex=True)
     df = df.sort_values('Company')
     return(df)
@@ -219,20 +224,18 @@ def get_all_parameters_for_all_listings(url):
 
 if __name__ == '__main__':
     # Output all job parameters for a given query to CSV
-    debug = True
 
     search_q = 'analyst'
     search_l = 'Bay Area, CA'
-    search_url = 'https://www.indeed.com/' + \
-                 'jobs?q=' + search_q + \
-                 '&l=' + search_l
+    search_url = ('https://www.indeed.com/jobs?q={}&l={}'.format(search_q,
+                                                                 search_l))
 
-    if debug: print(search_url)
+    if debug:
+        print(search_url)
 
     df_all_parameters = get_all_parameters_for_all_listings(search_url)
     current_date = datetime.now()
 
-    df_all_parameters.to_csv(
-        current_date.strftime('%Y-%m-%d') + '_'
-        + search_q.upper() + '.csv'
-    )
+    df_all_parameters.to_csv('{}_{}.csv'.format(
+                              current_date.strftime('%Y-%m-%d'),
+                              search_q.upper()))

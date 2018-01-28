@@ -21,27 +21,24 @@ with Image.open(os.path.join(static_path, 'images', 'spider-mask.png')) as img:
 
 def generate_wordcloud(d_words):
     # Generate wordcloud in the shape of a spider
-    wordcloud = WordCloud(
-                          font_path=font_path,
+    wordcloud = WordCloud(font_path=font_path,
                           background_color='white',
                           max_words=3000,
                           mask=mask,
                           max_font_size=500,
-                          random_state=42
-                          )
+                          random_state=42)
 
     wordcloud.generate_from_frequencies(d_words)
     return(wordcloud)
 
 
 if __name__ == '__main__':
-
     # Build a search_url and get a dict containing words and their freq
-    search_keyword = 'firefighter'
-    search_location = 'Bay Area, CA'
-    search_url = 'https://www.indeed.com/' + \
-                 'jobs?q=' + search_keyword + \
-                 '&l=' + search_location
+
+    search_q = 'firefighter'
+    search_l = 'Bay Area, CA'
+    search_url = ('https://www.indeed.com/jobs?q={}&l={}'.format(search_q,
+                                                                 search_l))
 
     print(search_url)
 

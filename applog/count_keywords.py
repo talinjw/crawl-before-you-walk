@@ -20,6 +20,7 @@ with open(os.path.join(static_path, 'EN_DICT.txt')) as f2:
 
 def get_text_all(links, max_links):
     # Provided a list of urls, get all text from each url
+
     text_by_link = []
     success_counter = 0
     failure_counter = 0
@@ -32,7 +33,7 @@ def get_text_all(links, max_links):
         if 'http' in link:
             url = link
         else:
-            url = 'https://' + link
+            url = 'https://{}'.format(link)
 
         try:
             response = requests.get(url, timeout=3)
@@ -47,19 +48,19 @@ def get_text_all(links, max_links):
 
         except:
             if debug:
-                print("{} did not work for some reason.".format(url))
+                print('{} did not work for some reason.'.format(url))
             failure_counter = failure_counter + 1
             continue
 
     if debug:
-        print('{} were crawled successfully.'.format(
-                success_counter))
+        print('{} were crawled successfully.'.format(success_counter))
 
     return(text_by_link)
 
 
 def get_text_from_link(link):
     # Provided a single url, get all text
+
     if 'http' in link:
         url = link
     else:
@@ -74,7 +75,7 @@ def get_text_from_link(link):
 
     except:
         if debug:
-            print("{} did not work for some reason.".format(url))
+            print('{} did not work for some reason.'.format(url))
 
     return(page_text)
 
@@ -134,25 +135,22 @@ def get_words_by_freq(links, sort_type, max_links):
     d_words = count_unique_words(relevant_words)
 
     if sort_type is 'key':
-        words_by_frequency = sorted(
-                                    d_words.items(),
+        words_by_frequency = sorted(d_words.items(),
                                     key=operator.itemgetter(0),
-                                    reverse=True
-                                    )
+                                    reverse=True)
 
     elif sort_type is 'value':
-        words_by_frequency = sorted(
-                                    d_words.items(),
+        words_by_frequency = sorted(d_words.items(),
                                     key=operator.itemgetter(1),
-                                    reverse=True
-                                    )
+                                    reverse=True)
 
     else:
         words_by_frequency = d_words
 
     if debug:
-        print('Within the dictionary, there are {} unique words.'.format(
-            len(d_words)))
+        print('Within the dictionary, '
+              'there are {} unique words.'.format(len(d_words)))
+
         pprint(words_by_frequency)
 
     return(words_by_frequency)
@@ -161,11 +159,10 @@ def get_words_by_freq(links, sort_type, max_links):
 if __name__ == '__main__':
 
     # Build search_url and get a dataframe containing all associated links
-    search_keyword = 'firefighter'
-    search_location = 'Bay Area, CA'
-    search_url = 'https://www.indeed.com/' + \
-                 'jobs?q=' + search_keyword + \
-                 '&l=' + search_location
+    search_q = 'firefighter'
+    search_l = 'Bay Area, CA'
+    search_url = ('https://www.indeed.com/jobs?q={}&l={}'.format(search_q,
+                                                                 search_l))
 
     print(search_url)
 
