@@ -37,7 +37,7 @@ def results():
     # Get primary dataframe
     df = jobs.get_all_parameters_for_all_listings(search_url, max_pages)
     results_returned = len(df)
-    flash('{} result(s) were found.'.format(
+    flash('{} result(s) shown.'.format(
           results_returned))
 
     # Get dictionary of words by frequency
