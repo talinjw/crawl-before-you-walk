@@ -4,7 +4,7 @@
 ![](/static/images/readme.png?raw=true "Example output; create your own spider!")
 
 <b>Search by title or location:</b> output consists of job postings and their summary level parameters; <br>
-a word cloud is also generated based on the frequency of key terms found within the first 150 listings.
+a word cloud is also generated based on the frequency of key terms found within the first 15 listings.
 
 This project uses a number of third-party libraries, including:
 - requests
