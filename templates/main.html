@@ -31,10 +31,31 @@
                 </div>
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="site_header">
-                    <ul class="nav navbar-nav">
+                    <ul class="nav navbar-nav" id="override-bs-navbar1">
                         <li><a href="/about/">About</a></li>
                         <li><a href="https://github.com/talinjw/Crawl_Before_You_Walk" target="_blank">Git</a></li>
                         <li><a href="https://github.com/talinjw" target="_blank">Other Projects</a></li>
+                    </ul>
+                    <ul class="nav-dropdown" id="override-bs-navbar2">
+                        <form class="form-inline" action="/search-results/" method="get">
+                            <div class="input-group search-group">
+                                <span class="input-group-btn">
+                                    <select name="pages" value="1" class="form-control">
+                                        <option value="1">Return: 1 Page</option>
+                                        <option value="2">Return: 2 Pages</option>
+                                        <option value="3">Return: 3 Pages</option>
+                                        <option value="4">Return: 4 Pages</option>
+                                        <option value="5">Return: 5 Pages</option>
+                                        <option value="10">Return: 10 Pages</option>
+                                        <option value="15">Return: 15 Pages</option>
+                                        <option value="20">Return: 20 Pages</option>
+                                        <option value="25">Return: 25 Pages</option>
+                                        <option value="50">Return: 50 Pages</option>
+                                        <option value="75">Return: 75 Pages</option>
+                                        <option value="100">Return: 100 Pages</option>
+                                    </select>
+                                </span>
+                            </div>
                     </ul>
                 </div>
             </div>
@@ -48,7 +69,7 @@
             <div class="form-container">
             	<div class="row">
                     <div class="span12">
-                        <form class="form-inline" action="/search-results/" method="get">
+                        <!-- <form class="form-inline" action="/search-results/" method="get"> -->
                             <input name="q" style="width: 332px; height: 33px; border-radius: 3px;" class="span5" type="text"  placeholder=" job title, keywords or company name" >
                             <input name="l" style="width: 332px; height: 33px; border-radius: 3px;" class="span5" type="text"  placeholder=" city, state or zip">
                             <input type="submit" style="background-color:#034abe" value="Find Jobs" class="btn btn-primary" />

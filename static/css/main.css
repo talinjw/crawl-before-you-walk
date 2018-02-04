@@ -25,3 +25,13 @@ body {
     max-width: 1000px;
     width: 100%;
 }
+
+#override-bs-navbar1 {
+    float: left;
+}
+
+#override-bs-navbar2 {
+    list-style: none;
+    margin: 10px;
+    float: right;
+}

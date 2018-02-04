@@ -28,11 +28,9 @@ def results():
     render_template('loader.html')
     search_q = request.args.get('q')
     search_l = request.args.get('l')
+    max_pages = int(request.args.get('pages'))
     search_url = ('https://www.indeed.com/jobs?q={}&l={}'.format(search_q,
                                                                  search_l))
-
-    # Impose a limit on the number of pages returned
-    max_pages = 1
 
     # Get primary dataframe
     df = jobs.get_all_parameters_for_all_listings(search_url, max_pages)
