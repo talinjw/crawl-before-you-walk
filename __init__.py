@@ -1,5 +1,6 @@
 from flask import Flask, render_template, flash, request
 from datetime import datetime
+import operator
 import os
 
 import applog.list_jobs as jobs
@@ -14,7 +15,6 @@ static_path = os.path.abspath(os.path.join(d, 'static', 'images', 'spiders'))
 
 @app.route('/')
 def homepage():
-    flash('flash test')
     return render_template('main.html')
 
 
@@ -43,7 +43,10 @@ def results():
                                                     None,
                                                     100)
 
-    # flash(words_by_frequency)
+    # Sort the dictionary by values by creating a list of ordered tuples
+    ordered_tuples = sorted(words_by_frequency.items(),
+                                key=operator.itemgetter(1),
+                                reverse=True)
 
     # Create a unique name for dynamically generated spider_png
     current_dt = datetime.now()
@@ -63,7 +66,7 @@ def results():
                        index=False,
                        escape=False)
 
-    return render_template('results.html', TABLE=table, PNG=spider_name)
+    return render_template('results.html', TABLE=table, PNG=spider_name, ORDERED_TUPLES=ordered_tuples)
 
 
 @app.route('/loading/')

@@ -1,37 +1,50 @@
-html {
+html, body {
   height: 100%;
-  box-sizing: border-box;
-}
-
-*,
-*:before,
-*:after {
-  box-sizing: inherit;
 }
 
 body {
-    position: relative;
-    margin: 0;
-    padding-bottom: 6rem;
-    min-height: 100%;
-    font-family: "Helvetica Neue", Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
 }
 
-#override-bs-body .home-container {
-    margin: 0 auto;
-    padding-top: 12%;
-    padding-right: 5%;
-    padding-left: 5%;
-    max-width: 1000px;
-    width: 100%;
+.main-container {
+  flex: 1 0 auto;
 }
 
-#override-bs-navbar1 {
+.flex-container {
+    display: flex;           /* establish flex container */
+    flex-direction: column;  /* make main axis vertical */
+    justify-content: center; /* center items vertically, in this case */
+    align-items: center;     /* center items horizontally, in this case */
+    height: 525px;
+}
+
+.box {
+    width: 765px;
+}
+
+#main-logo {
+    text-align: left;
+}
+
+#home-navbar {
     float: left;
 }
 
-#override-bs-navbar2 {
+#page-form {
     list-style: none;
     margin: 10px;
     float: right;
+}
+
+a {
+    color:#034abe !important;
+}
+
+a:hover {
+    color:#f4b841 !important;
+}
+
+th {
+    font-weight: bold !important;
 }

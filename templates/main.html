@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+
         <title>You've Got to Crawl (Before You Walk)</title>
         <link rel="shortcut icon" href="{{ url_for("static", filename="favicon.ico")}}">
 
@@ -13,12 +14,15 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="{{ url_for("static", filename="css/main.css")}}">
         <link rel="stylesheet" href="{{ url_for("static", filename="css/footer.css")}}">
+
     </head>
 
     <header>
+
         <!-- Navbar -->
         <nav class="navbar navbar-default">
             <div class="container-fluid">
+
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#site_header" aria-expanded="false">
@@ -29,14 +33,18 @@
                     </button>
                     <a class="navbar-brand">Home</a>
                 </div>
+
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="site_header">
-                    <ul class="nav navbar-nav" id="override-bs-navbar1">
+                    <ul class="nav navbar-nav" id="home-navbar">
                         <li><a href="/about/">About</a></li>
                         <li><a href="https://github.com/talinjw/Crawl_Before_You_Walk" target="_blank">Git</a></li>
                         <li><a href="https://github.com/talinjw" target="_blank">Other Projects</a></li>
                     </ul>
-                    <ul class="nav-dropdown" id="override-bs-navbar2">
+
+                    <ul class="nav-dropdown" id="page-form">
+
+                        <!-- Form closed in body -->
                         <form class="form-inline" action="/search-results/" method="get">
                             <div class="input-group search-group">
                                 <span class="input-group-btn">
@@ -56,37 +64,31 @@
                                     </select>
                                 </span>
                             </div>
+
                     </ul>
+
                 </div>
             </div>
         </nav>
     </header>
 
-    <body id="override-bs-body">
+    <body>
         <!-- Main Content Goes Here -->
-        <div class="home-container">
-            <a href="http://jobcrawl.net" onClick="window.location.reload()"><img id="main-logo" src="{{ url_for("static", filename="images/indeed-crawler-logo.png")}}"></a>
-            <div class="form-container">
-            	<div class="row">
-                    <div class="span12">
-                        <!-- <form class="form-inline" action="/search-results/" method="get"> -->
-                            <input name="q" style="width: 332px; height: 33px; border-radius: 3px;" class="span5" type="text"  placeholder=" job title, keywords or company name" >
-                            <input name="l" style="width: 332px; height: 33px; border-radius: 3px;" class="span5" type="text"  placeholder=" city, state or zip">
-                            <input type="submit" style="background-color:#034abe" value="Find Jobs" class="btn btn-primary" />
-                        </form> <br>
-                        <!-- {% with messages = get_flashed_messages() %}
-                            {%if messages %}
-                                {% for message in messages %}
-                                    <div class="alert alert-warning alert-dismissible" style="width: 756px; margin:0 auto; text-align:left" role="alert">
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span></button>
-                                        {{message}}
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
-                        {% endwith %} -->
-                    </div>
+        <div class="main-container">
+            <div class="flex-container">
+
+                <div class="box" id="main-logo">
+                    <a href="http://jobcrawl.net" onClick="window.location.reload()"><img src="{{ url_for("static", filename="images/indeed-crawler-logo.png")}}"></a>
                 </div>
+
+                <div class="box" id="crawler-search-bar">
+                    <!-- Form open in header -->
+                    <input name="q" style="width: 332px; height: 33px; border-radius: 3px;" class="span5" type="text"  placeholder=" job title, keywords or company name" >
+                    <input name="l" style="width: 332px; height: 33px; border-radius: 3px;" class="span5" type="text"  placeholder=" city, state or zip">
+                    <input type="submit" style="background-color:#034abe" value="Find Jobs" class="btn btn-primary" />
+                    </form> 
+                </div>
+
             </div>
         </div>
         <!-- Javascript -->
@@ -94,13 +96,13 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     </body>
 
-    <footer id="override-bs-footer">
+    <footer id="main-footer">
         <div class="g-footer">
             <a href="https://www.facebook.com/talin.wauchope" target="_blank" class="fa fa-facebook"></a>
             <a href="https://www.linkedin.com/in/talin-wauchope/" target="_blank" class="fa fa-linkedin"></a>
             <a href="https://twitter.com/Talin_Wauchope" target="_blank" class="fa fa-twitter"></a>
             <a href="mailto:talin.wauchope@gmail.com" class="fa fa-envelope"></a> <br>
-            Copyright &#169; 2017 Talin Wauchope. All Rights Reserved. <br>
+            Copyright &#169; 2017 Talin Wauchope. All Rights Reserved.
             <!-- jobcrawl.net is powered by Digital Ocean and Bluehost. -->
         </div>
     </footer>
