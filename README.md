@@ -18,8 +18,8 @@ See requirements.txt for a list of all dependencies. <br>
 <b><i> The Main Page </i></b>
 ![](/static/images/Main.png?raw=true "Oh, so fancy!") <br> <br>
 
-<b><i> The Summary Table in Action </i></b>
-![](/static/images/Table.png?raw=true "Oh, so tabular!") <br> <br>
+<b><i> The Summary Table </i></b>
+![](/static/images/results-table.png?raw=true "Oh, so tabular!") <br> <br>
 
-<b><i> The WordCloud in Action </i></b>
-![](/static/images/Spider.png?raw=true "Your very own data spider! Congratulations!")
+<b><i> The WordCloud </i></b>
+![](/static/images/wordcloud.png?raw=true "Your very own data spider! Congratulations!")
