@@ -31,43 +31,45 @@ def results():
     max_pages = int(request.args.get('pages'))
     search_url = ('https://www.indeed.com/jobs?q={}&l={}'.format(search_q,
                                                                  search_l))
+    try:
+        # Get primary dataframe
+        df = jobs.get_all_parameters_for_all_listings(search_url, max_pages)
+        results_returned = len(df)
+        flash('{} result(s) shown.'.format(
+              results_returned))
 
-    # Get primary dataframe
-    df = jobs.get_all_parameters_for_all_listings(search_url, max_pages)
-    results_returned = len(df)
-    flash('{} result(s) shown.'.format(
-          results_returned))
+        # Get dictionary of words by frequency
+        words_by_frequency = keywords.get_words_by_freq(df['Link'].tolist(),
+                                                        None,
+                                                        100)
 
-    # Get dictionary of words by frequency
-    words_by_frequency = keywords.get_words_by_freq(df['Link'].tolist(),
-                                                    None,
-                                                    100)
+        # Sort the dictionary by values by creating a list of ordered tuples
+        ordered_tuples = sorted(words_by_frequency.items(),
+                                    key=operator.itemgetter(1),
+                                    reverse=True)
 
-    # Sort the dictionary by values by creating a list of ordered tuples
-    ordered_tuples = sorted(words_by_frequency.items(),
-                                key=operator.itemgetter(1),
-                                reverse=True)
+        # Create a unique name for dynamically generated spider_png
+        current_dt = datetime.now()
+        spider_name = '{}_{}.png'.format(current_dt.strftime('%Y-%m-%d'),
+                                         search_q.strip())
 
-    # Create a unique name for dynamically generated spider_png
-    current_dt = datetime.now()
-    spider_name = '{}_{}.png'.format(current_dt.strftime('%Y-%m-%d'),
-                                     search_q.strip())
+        png_path = os.path.join(static_path, spider_name)
 
-    png_path = os.path.join(static_path, spider_name)
+        # If the PNG does not already exist, then generate new wordcloud
+        if os.path.exists(png_path) is False:
+            wordcloud = cloud.generate_wordcloud(words_by_frequency)
+            wordcloud.to_file(png_path)
 
-    # If the PNG does not already exist, then generate new wordcloud
-    if os.path.exists(png_path) is False:
-        wordcloud = cloud.generate_wordcloud(words_by_frequency)
-        wordcloud.to_file(png_path)
+        # Clean up the table to be displayed
+        del df['Link']
+        table = df.to_html(classes='table table-hover',
+                           index=False,
+                           escape=False)
 
-    # Clean up the table to be displayed
-    del df['Link']
-    table = df.to_html(classes='table table-hover',
-                       index=False,
-                       escape=False)
+        return render_template('results.html', TABLE=table, PNG=spider_name, ORDERED_TUPLES=ordered_tuples)
 
-    return render_template('results.html', TABLE=table, PNG=spider_name, ORDERED_TUPLES=ordered_tuples)
-
+    except:
+        return render_template('no-results.html', SEARCH_URL=search_url)
 
 @app.route('/loading/')
 def loader():

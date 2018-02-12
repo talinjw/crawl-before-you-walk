@@ -12,15 +12,19 @@ body {
 }
 
 .flex-container {
-    display: flex;           /* establish flex container */
-    flex-direction: column;  /* make main axis vertical */
-    justify-content: center; /* center items vertically, in this case */
-    align-items: center;     /* center items horizontally, in this case */
-    height: 525px;
+  left: 32%;
+  width: 60%;
+  height: 20%;
+  top: 30%;
+  position: absolute;
+}
+
+@media only screen (max-width: 700px) {
+  .flex-container {left: 5%; width: 60%; height: 20%; top: 30%; position: absolute;}
 }
 
 .box {
-    width: 765px;
+  width: 100%;
 }
 
 #main-logo {
